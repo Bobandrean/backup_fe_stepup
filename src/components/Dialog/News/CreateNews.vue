@@ -8,39 +8,56 @@
         <v-text-field
           v-model="formValues.title"
           label="Title"
+          :rules="[rules.required]"
           required
           variant="outlined"
         ></v-text-field>
         <v-text-field
           v-model="formValues.slug"
+          :rules="[rules.required]"
           label="Slug"
           required
           variant="outlined"
         ></v-text-field>
-        <QuillEditor theme="snow" 
-        @update:content = "handleContent($event)"
+        <QuillEditor
+          theme="snow"
+          @update:content="handleContent($event)"
           v-model="formValues.content"
           placeholder="Content"
           required
           variant="outlined"
-          />
-          <br>
-          <v-textarea
+        />
+        <br />
+        <v-textarea
           v-model="formValues.short_content"
           placeholder="Short Content"
+          :rules="[rules.required]"
           required
-          variant="outlined"> 
+          variant="outlined"
+        >
         </v-textarea>
-        <v-file-input class="mt-5"
+        <v-file-input
+          class="mt-5"
           v-model="formValues.image"
+          :rules="[rules.required]"
           @change="handleChangePhoto($event)"
           label="Foto"
         ></v-file-input>
+
         <v-row>
           <v-col md="5" align-self="left">
-            <v-btn block color="success">Add Attachment</v-btn>
+            <v-btn @click="handleAddAttachment" block color="success">Add Attachment</v-btn>
           </v-col>
         </v-row>
+
+        <!-- <div v-for="(file, index) in formValues.files" :key="file">
+          <v-file-input
+            class="mt-5"
+            :value="formValues.files[index]"
+            @change="handleChangeFile($event, index)"
+            :label="`File ${index + 1}`"
+          ></v-file-input>
+        </div> -->
 
         <v-row>
           <v-col md="6"></v-col>
@@ -59,13 +76,15 @@
     </section>
   </BaseDialog>
 </template>
-  
+
 <script setup>
 import BaseDialog from '@/components/Base/Dialog.vue'
-import { reactive, ref } from '@vue/reactivity'
+import { reactive, ref } from 'vue'
 import { useNewsStore } from '@/stores/news'
 import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
 const newsStore = useNewsStore()
 
@@ -74,20 +93,37 @@ const formValues = reactive({
   slug: '',
   content: '',
   short_content: '',
-  image: ''
+  image: '',
+  files: []
 })
+
+// Validation
+const rules = {
+  title: { required, minLength: minLength(3) },
+  slug: { required },
+  content: { required },
+  short_content: { required }
+}
 
 const refCreateNews = ref('')
 
 const handleSubmit = () => {
   console.log(formValues)
   newsStore.createNews(formValues).then(() => {
-    newsStore.fetchNews()
+    newsStore.fetchNews('')
     refCreateNews.value.close()
   })
 }
 
 const handleContent = (val) => {
-  formValues.content = val.ops[0].insert;
+  formValues.content = val.ops[0].insert
+}
+
+const handleAddAttachment = () => {
+  formValues.files.push('')
+}
+
+const handleChangeFile = (event, index) => {
+  formValues.files[index] = event.target.files[0]
 }
 </script>

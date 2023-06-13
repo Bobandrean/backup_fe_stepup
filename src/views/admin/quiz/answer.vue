@@ -13,12 +13,15 @@
         <v-card class="mt-5" v-for="question in getDetailQuiz.question" :key="question.id">
           <v-card-item>
             <v-card-title>{{ question.title }}</v-card-title>
-            <template v-for="choice in question.choice" :key="choice.id">
-              <v-radio-group v-model="choice.is_selected">
-                <v-radio :id="choice.id" :label="choice.choice_text" value="1"></v-radio>
-              </v-radio-group>
-            </template>
-            <!-- {{ getDetailQuiz.question }} -->
+            <v-radio-group v-model="choiceAnswer">
+              <v-radio
+                v-for="choice in question.choice"
+                :key="choice.id"
+                :id="choice.id"
+                :label="choice.choice_text"
+                :value="choice.choice_text"
+              ></v-radio>
+            </v-radio-group>
           </v-card-item>
         </v-card>
         <v-btn class="mt-5 save-button" type="submit">Submit</v-btn>
@@ -41,6 +44,8 @@ onMounted(() => {
 })
 
 const getAnswerQuiz = computed(() => quizStore.getAnswerQuiz)
+
+const choiceAnswer = ref('Choice D')
 
 const router = useRouter()
 const is_selected = ref(false) // Set it to `true` for checked, or `false` for unchecked

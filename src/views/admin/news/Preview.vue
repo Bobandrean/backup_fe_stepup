@@ -1,40 +1,97 @@
 <template>
-  <v-row>
-    <button class="text-button" @click="handleBack">
-      <v-icon>mdi-chevron-left</v-icon> News Management
-    </button>
-  </v-row>
-  <v-row>
-    <v-col cols="12" sm="6" md="4">
-      <v-card>
-        <v-card-item>
-          <v-card-title>
-            {{ getDetailNews.title }}
-          </v-card-title>
-          <v-card-subtitle> Created Date : {{ getDetailNews.created_at }} </v-card-subtitle>
-          <v-img style="height: 340px" :src="getDetailNews?.image"></v-img>
-          <v-card-text>
-            {{ getDetailNews.content }}
-          </v-card-text>
-        </v-card-item>
-      </v-card>
-    </v-col>
-  </v-row>
+  <div style="margin-top: 15px">
+    <v-row>
+      <button class="text-button" @click="handleBack">
+        <v-icon>mdi-chevron-left</v-icon> News List
+      </button>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-card>
+          <v-card-item>
+            <v-card-title>
+              {{ getDetailNews.title }}
+            </v-card-title>
+            <v-card-subtitle> Created Date : {{ getDetailNews.created_at }} </v-card-subtitle>
+            <v-img style="height: 340px" :src="getDetailNews?.image"></v-img>
+            <v-card-text>
+              {{ getDetailNews.content }}
+            </v-card-text>
+          </v-card-item>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row v-if="getDetailNews.files">
+      <v-col cols="10">
+        <p>Attachments:</p>
+        <v-select
+          label="Select Pdf file"
+          :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <div class="d-flex align-center">
+          <v-btn @click="handleDownloadPdf" color="primary" class="mt-5" block>Download</v-btn>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <div class="d-flex justify-space-between">
+          <v-btn @click="handlePrevPdf" color="primary">Prev</v-btn>
+          <span>{{ page }} / {{ pages }}</span>
+          <v-btn @click="handleNextPdf" color="primary">Next</v-btn>
+        </div>
+      </v-col>
+    </v-row>
+
+    <div class="d-flex justify-center">
+      <VuePDF :pdf="pdf" :page="page" />
+    </div>
+  </div>
 </template>
-  
-  <script setup>
+
+<script setup>
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
 import { useNewsStore } from '@/stores/news'
 import { ref, computed, onMounted } from 'vue'
+import { VuePDF, usePDF } from '@tato30/vue-pdf'
 
 const route = useRoute()
 const newsStore = useNewsStore()
 const getDetailNews = computed(() => newsStore.getDetailNews)
 
+const { pdf, pages } = usePDF('/test.pdf')
+
 onMounted(() => {
   newsStore.fetchDetailNews(route.params.id)
 })
+
+const page = ref(1)
+
+const handleNextPdf = () => {
+  if (page.value < pages.value) {
+    page.value++
+  }
+}
+
+const handlePrevPdf = () => {
+  if (page.value > 1) {
+    page.value--
+  }
+}
+
+const handleDownloadPdf = () => {
+  // Download PDF using href with link
+  const linkSource = `/test.pdf`
+  const downloadLink = document.createElement('a')
+  const fileName = 'test.pdf'
+
+  downloadLink.href = linkSource
+  downloadLink.download = fileName
+  downloadLink.click()
+}
 
 const router = useRouter()
 
@@ -46,8 +103,8 @@ const handleBack = () => {
   router.push('/admin/news/manage')
 }
 </script>
-  
-  <style scooped>
+
+<style scooped>
 .text-button {
   margin-top: 10px;
   margin-left: 15px;
@@ -116,5 +173,13 @@ const handleBack = () => {
   will-change: box-shadow;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-center {
+  justify-content: center;
 }
 </style>
