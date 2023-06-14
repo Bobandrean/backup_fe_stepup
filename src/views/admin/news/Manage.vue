@@ -165,7 +165,7 @@ const handlePreview = async (id) => {
 <style scoped>
 .custom-button {
   background-color: #1ee54c; /* Dark blue background */
-  // color: #ffffff; /* White text */
+  color: #ffffff; /* White text */
 }
 .card-news {
   display: block;
