@@ -7,9 +7,8 @@
     </v-col>
   </v-row>
 
-  <v-row class="ml-5" style="min-height: 100vh">
+  <v-row class="ml-5">
     <v-col md="12">
-      asd
       <v-form v-model="valid" @submit.prevent="handleSubmit">
         <v-text-field
           variant="outlined"
@@ -51,8 +50,7 @@
         <!-- Form fields -->
         <v-divider></v-divider>
         <!-- Add Question button -->
-        <v-btn class="mt-5 mb-5 primary-button" @click="addQuestion">Add Question</v-btn>
-
+        <v-btn class="mt-5 mb-5" @click="addQuestion">Add Question</v-btn>
         <!-- Questions -->
         <div v-for="(question, questionIndex) in state.questions" :key="questionIndex">
           <v-text-field
@@ -73,22 +71,16 @@
               ></v-text-field>
             </v-col>
             <v-col md="2">
-              <v-checkbox
-                v-model="choice.is_correct"
-                label="Right Answer"
-                @change="handleCheckboxChange(choice)"
-              ></v-checkbox>
+              <v-checkbox v-model="choice.is_correct" label="Right Answer"></v-checkbox>
             </v-col>
           </v-row>
 
           <!-- Add Choice button -->
-          <v-btn class="mt-5 mb-5 primary-button" @click="addQuestion" variant="tonal"
-            >Add Question</v-btn
-          >
+          <v-btn class="mb-4" @click="addChoice(questionIndex)">Add Choice</v-btn>
         </div>
 
         <!-- Submit button -->
-        <v-btn class="mt-5 save-button" type="submit">Save</v-btn>
+        <v-btn class="mt-5" type="submit">Save</v-btn>
       </v-form>
     </v-col>
   </v-row>
@@ -97,7 +89,7 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
 
-import { ref, computed, onMounted, reactive, watchEffect, watch } from 'vue'
+import { ref, computed, onMounted, reactive, watchEffect } from 'vue'
 import { useQuizStore } from '@/stores/quiz'
 import { useAuthStore } from '@/stores/auth'
 
@@ -113,7 +105,7 @@ const state = reactive({
   questions: [
     {
       title: '',
-      choices: [{ text: '', is_correct: 0 }]
+      choices: [{ text: '', is_correct: false }]
     }
   ]
 })
@@ -132,16 +124,6 @@ const addChoice = (questionIndex) => {
   })
 }
 
-const handleCheckboxChange = (choice) => {
-  nextTick(() => {
-    if (choice.is_correct) {
-      choice.is_correct = 1
-    } else {
-      choice.is_correct = 0
-    }
-  })
-}
-
 const deleteQuestion = (questionIndex) => {
   state.questions.splice(questionIndex, 1)
 }
@@ -151,11 +133,9 @@ const deleteChoice = (questionIndex, choiceIndex) => {
 }
 
 const handleSubmit = () => {
+  console.log(state)
   quizStore.createQuiz(state).then(() => {
     quizStore.fetchQuiz()
-
-    const router = useRouter()
-    router.push('/admin/quiz/manage')
   })
 }
 
@@ -187,31 +167,74 @@ const getUsers = computed(() => authStore.getUsers)
 onMounted(() => {
   authStore.fetchUsers()
 })
-
-const handleBack = () => {
-  // perform logout logic
-
-  // redirect to login page
-  router.push('/admin/quiz/list')
-}
 </script>
 
-<style scooped>
-.primary-button {
-  background-color: #002469;
-  color: white;
+<style>
+.text-button {
+  margin-top: 10px;
+  margin-left: 15px;
+  height: 36px;
+  min-width: 64px;
+  padding: 0 16px;
+  background-color: #002469 !important;
+  border-color: #002469 !important;
+  color: #fff;
 }
 
-.primary-button:hover {
-  background-color: #002469;
+.card-news {
+  display: block;
+  max-width: 100%;
+  outline: none;
+  text-decoration: none;
+  transition-property: box-shadow, opacity;
+  overflow-wrap: break-word;
+  position: relative;
+  white-space: normal;
+  transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: box-shadow;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
-.save-button {
-  background-color: green;
-  color: white;
+.news-title {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.0125em;
+  line-height: 2rem;
+  word-break: break-all;
 }
 
-.save-button:hover {
-  background-color: darkgreen;
+.news-subtitle {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.375rem;
+  letter-spacing: 0.0071428571em;
+}
+
+.button-news {
+  align-items: center;
+  color: inherit;
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: inherit;
+  line-height: normal;
+  position: relative;
+}
+
+.divider-with-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.divider-text {
+  background-color: #fff;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
 }
 </style>

@@ -13,14 +13,15 @@
         <v-card class="mt-5" v-for="question in getDetailQuiz.question" :key="question.id">
           <v-card-item>
             <v-card-title>{{ question.title }}</v-card-title>
-            <v-radio-group v-model="choiceAnswer">
+            <v-radio-group v-model="question.is_selected_answer">
               <v-radio
                 v-for="choice in question.choice"
                 :key="choice.id"
                 :id="choice.id"
                 :label="choice.choice_text"
                 :value="choice.choice_text"
-              ></v-radio>
+              >
+              </v-radio>
             </v-radio-group>
           </v-card-item>
         </v-card>
@@ -45,7 +46,7 @@ onMounted(() => {
 
 const getAnswerQuiz = computed(() => quizStore.getAnswerQuiz)
 
-const choiceAnswer = ref('Choice D')
+const choiceAnswer = ref('')
 
 const router = useRouter()
 const is_selected = ref(false) // Set it to `true` for checked, or `false` for unchecked
@@ -62,7 +63,7 @@ const handleBack = () => {
 const handleSubmit = () => {
   console.log(getDetailQuiz.value)
   quizStore.createAnswerQuiz(route.params.id, getDetailQuiz.value).then(() => {
-    router.push('/admin')
+    // router.push('/admin')
   })
 }
 </script>

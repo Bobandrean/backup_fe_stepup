@@ -25,8 +25,12 @@
       <v-col cols="10">
         <p>Attachments:</p>
         <v-select
-          label="Select Pdf file"
-          :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+          variant="solo"
+          label="Select"
+          v-model="selectedFile"
+          item-title="filepath"
+          item-value="filepath"
+          :items="getDetailNews.files"
         ></v-select>
       </v-col>
       <v-col cols="2">
@@ -46,7 +50,13 @@
     </v-row>
 
     <div class="d-flex justify-center">
-      <VuePDF :pdf="pdf" :page="page" />
+      <!-- <VuePDF :pdf="pdf" :page="page" /> -->
+      <iframe :src="selectedFile" frameborder="0"></iframe>
+      <iframe
+        src="https://dev-stepup.hrultra.com/backend/storage/documents/1686689676.anti.pdf"
+        frameborder="0"
+        anonymous
+      ></iframe>
     </div>
   </div>
 </template>
@@ -61,6 +71,7 @@ import { VuePDF, usePDF } from '@tato30/vue-pdf'
 const route = useRoute()
 const newsStore = useNewsStore()
 const getDetailNews = computed(() => newsStore.getDetailNews)
+const selectedFile = ref(null)
 
 const { pdf, pages } = usePDF('/test.pdf')
 
