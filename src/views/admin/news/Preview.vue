@@ -28,7 +28,7 @@
           variant="solo"
           label="Select"
           v-model="selectedFile"
-          item-title="filepath"
+          item-title="filename"
           item-value="filepath"
           :items="getDetailNews.files"
         ></v-select>
@@ -52,11 +52,11 @@
     <div class="d-flex justify-center">
       <!-- <VuePDF :pdf="pdf" :page="page" /> -->
       <iframe :src="selectedFile" frameborder="0"></iframe>
-      <iframe
+      <!-- <iframe
         src="https://dev-stepup.hrultra.com/backend/storage/documents/1686689676.anti.pdf"
         frameborder="0"
         anonymous
-      ></iframe>
+      ></iframe> -->
     </div>
   </div>
 </template>
