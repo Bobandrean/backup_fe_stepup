@@ -12,6 +12,9 @@
           required
           variant="outlined"
         ></v-text-field>
+        <span style="color:red" v-if="v$.title.$error">
+        {{ v$.title.$errors[0].$message }}
+      </span>
         <v-text-field
           v-model="formValues.slug"
           :rules="[rules.required]"
@@ -19,6 +22,9 @@
           required
           variant="outlined"
         ></v-text-field>
+        <span style="color:red" v-if="v$.slug.$error">
+        {{ v$.slug.$errors[0].$message }}
+        </span>
         <QuillEditor
           theme="snow"
           @update:content="handleContent($event)"
@@ -36,6 +42,9 @@
           variant="outlined"
         >
         </v-textarea>
+        <span style="color:red" v-if="v$.short_content.$error">
+        {{ v$.short_content.$errors[0].$message }}
+        </span>
         <v-file-input
           class="mt-5"
           v-model="formValues.image"
@@ -79,7 +88,7 @@
 
 <script setup>
 import BaseDialog from '@/components/Base/Dialog.vue'
-import { reactive, ref } from 'vue'
+import { reactive, ref, toRefs, computed } from 'vue'
 import { useNewsStore } from '@/stores/news'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
@@ -98,22 +107,38 @@ const formValues = reactive({
 })
 
 // Validation
-const rules = {
+const rules = computed(() => {
+  return {
   title: { required, minLength: minLength(3) },
   slug: { required },
   content: { required },
   short_content: { required }
-}
+  };
+});
 
-const refCreateNews = ref('')
+const v$ = useVuelidate(rules, formValues);
+v$.value.$validate();
+const { title, slug, content, short_content } = toRefs(v$);
 
 const handleSubmit = () => {
-  console.log(formValues)
+  v$.value.$validate();
+  if (v$.value.$error) {
+    console.log("error")
+        alert(
+       "I'm sorry, you seem to not have filled all inputs. Please fill them up and try again."
+     );
+    // Form is invalid
+    // You can display an error message or perform appropriate actions
+  }
+
+  console.log(formValues);
   newsStore.createNews(formValues).then(() => {
-    newsStore.fetchNews('')
-    refCreateNews.value.close()
-  })
-}
+    newsStore.fetchNews('');
+    refCreateNews.value.close();
+  });
+};
+
+const refCreateNews = ref('')
 
 const handleContent = (val) => {
   formValues.content = val.ops[0].insert

@@ -9,13 +9,18 @@
 
   <v-row class="ml-5" style="min-height: 100vh">
     <v-col md="12">
-      asd
       <v-form v-model="valid" @submit.prevent="handleSubmit">
+        <span style="color:red" v-if="v$.moduleName.$error">
+        {{ v$.moduleName.$errors[0].$message }}
+      </span>
         <v-text-field
           variant="outlined"
           v-model="state.moduleName"
           label="Module Name"
         ></v-text-field>
+        <span style="color:red" v-if="v$.published_at.$error">
+        {{ v$.published_at.$errors[0].$message }}
+      </span>
         <v-text-field
           v-model="state.published_at"
           variant="outlined"
@@ -24,6 +29,9 @@
         ></v-text-field>
         <v-row>
           <v-col md="4">
+            <span style="color:red" v-if="v$.start_date.$error">
+        {{ v$.start_date.$errors[0].$message }}
+      </span>
             <v-text-field
               v-model="state.start_date"
               variant="outlined"
@@ -32,6 +40,9 @@
             ></v-text-field>
           </v-col>
           <v-col md="4">
+            <span style="color:red" v-if="v$.end_date.$error">
+        {{ v$.end_date.$errors[0].$message }}
+      </span>
             <v-text-field
               v-model="state.end_date"
               variant="outlined"
@@ -40,6 +51,9 @@
             ></v-text-field>
           </v-col>
           <v-col md="4">
+            <span style="color:red" v-if="v$.per_page.$error">
+        {{ v$.per_page.$errors[0].$message }}
+      </span>
             <v-text-field
               v-model="state.per_page"
               variant="outlined"
@@ -55,6 +69,9 @@
 
         <!-- Questions -->
         <div v-for="(question, questionIndex) in state.questions" :key="questionIndex">
+          <span style="color:red" v-if="v$.questions.$error">
+        {{ v$.questions.$errors[0].$message }}
+      </span>
           <v-text-field
             variant="outlined"
             v-model="question.title"
@@ -79,12 +96,12 @@
                 @change="handleCheckboxChange(choice)"
               ></v-checkbox>
             </v-col>
+
           </v-row>
 
           <!-- Add Choice button -->
-          <v-btn class="mt-5 mb-5 primary-button" @click="addQuestion" variant="tonal"
-            >Add Question</v-btn
-          >
+          <v-btn class="mt-5 mb-5 primary-button" @click="addChoice(questionIndex)" variant="tonal"
+            >Add Choice</v-btn>
         </div>
 
         <!-- Submit button -->
@@ -97,9 +114,11 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
 
-import { ref, computed, onMounted, reactive, watchEffect, watch } from 'vue'
+import { ref, computed, onMounted, reactive, watchEffect, watch, toRefs } from 'vue'
 import { useQuizStore } from '@/stores/quiz'
 import { useAuthStore } from '@/stores/auth'
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
 const quizStore = useQuizStore()
 const getQuiz = computed(() => quizStore.getQuiz())
@@ -117,6 +136,19 @@ const state = reactive({
     }
   ]
 })
+
+const rules = computed(() => {
+  return {
+  moduleName: { required, minLength: minLength(3) },
+  start_date: { required },
+  end_date: { required },
+  per_page: { required },
+  published_at: { required },
+  questions: { required }
+  };
+});
+
+const v$ = useVuelidate(rules, state);
 
 const addQuestion = () => {
   state.questions.push({
@@ -151,12 +183,23 @@ const deleteChoice = (questionIndex, choiceIndex) => {
 }
 
 const handleSubmit = () => {
+  v$.value.$validate();
+  if (v$.value.$error) {
+    console.log("error")
+        alert(
+       "I'm sorry, you seem to not have filled all inputs. Please fill them up and try again."
+     );
+    // Form is invalid
+    // You can display an error message or perform appropriate actions
+  }
+  else{
   quizStore.createQuiz(state).then(() => {
     quizStore.fetchQuiz()
 
     const router = useRouter()
     router.push('/admin/quiz/manage')
   })
+}
 }
 
 const route = useRoute()

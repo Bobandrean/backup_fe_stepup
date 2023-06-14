@@ -5,12 +5,18 @@
         <v-card-title class="text-center roboto-font white--text">Welcome to Step-up</v-card-title>
         <v-card-text>
           <v-form @submit.prevent="handleLogin">
+            <span style="color:red" v-if="v$.email.$error">
+        {{ v$.email.$errors[0].$message }}
+      </span>
             <v-text-field
               v-model="form.email"
               label="Email"
               required
               variant="solo-filled"
             ></v-text-field>
+            <span style="color:red" v-if="v$.password.$error">
+        {{ v$.password.$errors[0].$message }}
+      </span>
             <v-text-field
               v-model="form.password"
               label="Password"
@@ -18,6 +24,7 @@
               required
               variant="solo-filled"
             ></v-text-field>
+
             <v-btn type="submit" class="custom-button" block>Login</v-btn>
           </v-form>
         </v-card-text>
@@ -28,9 +35,11 @@
 
 <script setup>
 import { computed, onMounted } from 'vue'
-import { ref, reactive } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 
 const router = useRouter()
 const auth = useAuthStore()
@@ -47,7 +56,28 @@ const form = reactive({
   password: ''
 })
 
+// Validation
+const rules = computed(() => {
+  return {
+  email: { required },
+  password: { required }
+  };
+});
+
+const v$ = useVuelidate(rules, form);
+
+const { title, slug, content, short_content } = toRefs(v$);
+
 const handleLogin = async () => {
+  v$.value.$validate();
+  if (v$.value.$error) {
+    console.log("error")
+        alert(
+       "I'm sorry, you seem to not have filled all inputs. Please fill them up and try again."
+     );
+    // Form is invalid
+  }
+else{
   auth.login(form).then(async () => {
     const position = await auth.fetchUsersRole()
 
@@ -60,6 +90,7 @@ const handleLogin = async () => {
       router.push('/blank')
     }
   })
+}
 }
 
 onMounted(() => {
