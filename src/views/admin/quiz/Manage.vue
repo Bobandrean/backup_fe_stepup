@@ -1,5 +1,5 @@
 <template>
-  <v-row >
+  <v-row>
     <v-col md="12">
       <button @click="handleCreate()" class="text-button">
         <v-icon>mdi-plus</v-icon>Create Quiz
@@ -37,7 +37,7 @@
     </v-col>
   </v-row>
 
-  <v-row style="min-height: 100vh;">
+  <v-row style="min-height: 100vh">
     <v-col md="12">
       <v-card class="card-news mt-2 mb-2" v-for="quiz in getQuiz" :key="quiz.id">
         <v-row>
@@ -46,10 +46,11 @@
               {{ quiz?.module_name }}
             </v-card-title>
             <v-card-subtitle class="news-subtitle">
-              Period: {{ quiz?.start_date }} - {{ quiz?.end_date }}
+              Period : {{ convertDateManualToIndo(quiz?.start_date) }} -
+              {{ convertDateManualToIndo(quiz?.end_date) }}
             </v-card-subtitle>
             <v-card-subtitle class="news-subtitle mt-1 mb-2">
-              Created Date : {{ quiz?.created_at }}
+              Created Date : {{ convertDate(quiz?.created_at) }}
             </v-card-subtitle>
           </v-col>
           <v-col md="7">
@@ -74,9 +75,10 @@
     </v-col>
   </v-row>
 </template>
-  
-  <script setup>
+
+<script setup>
 import { useRouter, useRoute } from 'vue-router'
+import { convertDateManualToIndo, convertDate } from '../../../utils/date'
 
 import { ref, computed, onMounted, reactive, watchEffect } from 'vue'
 import { useQuizStore } from '@/stores/quiz'
@@ -126,16 +128,16 @@ const handlePreview = async (id) => {
   router.push(`/admin/quiz/preview/${id}`)
 }
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .text-button {
   margin-top: 10px;
   margin-left: 15px;
   height: 36px;
   min-width: 64px;
   padding: 0 16px;
-  background-color: #002469 !important;
-  border-color: #002469 !important;
+  background-color: #005eb8 !important;
+  border-color: #005eb8 !important;
   color: #fff;
 }
 

@@ -12,7 +12,9 @@
             <v-card-title>
               {{ getDetailNews.title }}
             </v-card-title>
-            <v-card-subtitle> Created Date : {{ getDetailNews.created_at }} </v-card-subtitle>
+            <v-card-subtitle>
+              Created Date : {{ convertDate(getDetailNews.created_at) }}
+            </v-card-subtitle>
             <v-img style="height: 340px" :src="getDetailNews?.image_url"></v-img>
             <v-card-text>
               {{ getDetailNews.content }}
@@ -39,15 +41,22 @@
         </div>
       </v-col>
     </v-row>
+    <!-- <v-row>
+      <v-col>
+        <div class="d-flex justify-space-between">
+          <v-btn @click="handlePrevPdf" color="primary" class="text-button">
+            <v-icon>mdi-chevron-left</v-icon> Previous
+          </v-btn>
+          <span class="my-auto">Page {{ page }} of {{ pages }}</span>
+          <v-btn @click="handleNextPdf" color="primary" class="text-button">
+            Next <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row> -->
     {{ selectedFile }}
-    <div class="d-flex justify-center">
-      <!-- <VuePDF :pdf="pdf" :page="page" /> -->
-      <iframe :src="selectedFile" frameborder="0" width="800" height="600"></iframe>
-      <!-- <iframe
-        src="https://dev-stepup.hrultra.com/backend/storage/documents/1686689676.anti.pdf"
-        frameborder="0"
-        anonymous
-      ></iframe> -->
+    <div class="d-flex justify-center mt-5">
+      <iframe :src="selectedFile" width="800px" height="800px" frameborder="1"></iframe>
     </div>
   </div>
 </template>
@@ -58,40 +67,44 @@ import { useRoute } from 'vue-router'
 import { useNewsStore } from '@/stores/news'
 import { ref, computed, onMounted } from 'vue'
 import { VuePDF, usePDF } from '@tato30/vue-pdf'
+import { convertDate } from '@/utils/date'
 
 const route = useRoute()
 const newsStore = useNewsStore()
 const getDetailNews = computed(() => newsStore.getDetailNews)
 const selectedFile = ref(null)
 
-const { pdf, pages } = usePDF('/test.pdf')
+// const { pdf, pages } = usePDF(
+//   'https://cse-bob.s3.ap-southeast-1.amazonaws.com/PLOTTING%20DOSBIM%20GENAP.pdf?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA3T42PSWVEYF5DIHI%2F20230615%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20230615T190124Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=d93916dc47bc6e378c1c3e2ad52d1444048faa3afa30b0ad03be947874863b98'
+// )
 
 onMounted(() => {
   newsStore.fetchDetailNews(route.params.id)
 })
 
-const page = ref(1)
+// const page = ref(1)
 
-const handleNextPdf = () => {
-  if (page.value < pages.value) {
-    page.value++
-  }
-}
+// const handleNextPdf = () => {
+//   if (page.value < pages.value) {
+//     page.value++
+//   }
+// }
 
-const handlePrevPdf = () => {
-  if (page.value > 1) {
-    page.value--
-  }
-}
+// const handlePrevPdf = () => {
+//   if (page.value > 1) {
+//     page.value--
+//   }
+// }
 
 const handleDownloadPdf = () => {
   // Download PDF using href with link
-  const linkSource = `/test.pdf`
+  const linkSource = selectedFile.value
   const downloadLink = document.createElement('a')
   const fileName = 'test.pdf'
 
   downloadLink.href = linkSource
   downloadLink.download = fileName
+  downloadLink.target = '_blank'
   downloadLink.click()
 }
 
@@ -113,8 +126,8 @@ const handleBack = () => {
   height: 36px;
   min-width: 64px;
   padding: 0 16px;
-  background-color: #002469 !important;
-  border-color: #002469 !important;
+  background-color: #005eb8 !important;
+  border-color: #005eb8 !important;
   color: #fff;
 }
 

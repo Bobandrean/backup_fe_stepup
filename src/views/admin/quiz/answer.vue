@@ -73,8 +73,8 @@ const handleSubmit = () => {
   height: 36px;
   min-width: 64px;
   padding: 0 16px;
-  background-color: #002469 !important;
-  border-color: #002469 !important;
+  background-color: #005eb8 !important;
+  border-color: #005eb8 !important;
   color: #fff;
 }
 
@@ -137,12 +137,12 @@ const handleSubmit = () => {
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 .primary-button {
-  background-color: #002469;
+  background-color: #005eb8;
   color: white;
 }
 
 .primary-button:hover {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 .save-button {

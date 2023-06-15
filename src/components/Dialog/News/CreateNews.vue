@@ -12,13 +12,13 @@
           required
           variant="outlined"
         ></v-text-field>
-        <v-text-field
+        <!-- <v-text-field
           v-model="formValues.slug"
           :rules="[rules.required]"
           label="Slug"
           required
           variant="outlined"
-        ></v-text-field>
+        ></v-text-field> -->
         <QuillEditor
           theme="snow"
           @update:content="handleContent($event)"
@@ -28,14 +28,14 @@
           variant="outlined"
         />
         <br />
-        <v-textarea
+        <!-- <v-textarea
           v-model="formValues.short_content"
           placeholder="Short Content"
           :rules="[rules.required]"
           required
           variant="outlined"
-        >
-        </v-textarea>
+        > -->
+        <!-- </v-textarea> -->
         <v-file-input
           class="mt-5"
           v-model="formValues.image"

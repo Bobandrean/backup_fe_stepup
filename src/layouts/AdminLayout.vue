@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-navigation-drawer color="#002469" v-model="drawer" location="left" temporary>
+    <v-navigation-drawer color="#005EB8" v-model="drawer" location="left" temporary>
       <v-list nav v-model:opened="open">
         <v-list-item prepend-icon="mdi-home" style="cursor: pointer" @click="goToHome()"
           ><span class="text-item">Home</span></v-list-item
@@ -50,7 +50,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar color="#002469" elevation="0" prominent style="z-index: 1">
+    <v-app-bar color="#005EB8" elevation="0" prominent style="z-index: 1">
       <template v-slot:prepend>
         <v-app-bar-nav-icon
           v-model="state.order"
@@ -140,15 +140,15 @@ const handleLogOut = async () => {
 
 <style scoped>
 #inspire .v-app-bar {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 #inspire .v-app-bar .v-navigation-drawer__content {
-  color: #002469;
+  color: #005eb8;
 }
 
 .v-navigation-drawer__content {
-  color: #002469;
+  color: #005eb8;
 }
 
 ÷ .sidebar-card {

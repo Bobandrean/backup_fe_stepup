@@ -42,18 +42,21 @@
   </v-row>
   <v-row>
     <v-col cols="12" v-for="news in getNews" :key="news.id">
-      <v-card class="card-news mt-2 mb-2">
+      <v-card class="card-news pa-3">
         <v-row>
           <v-col cols="6">
             <v-card-title class="news-title">{{ news?.title }}</v-card-title>
             <v-card-title>
-              <b>Status :</b>
+              <b>Status : </b>
               <v-chip :color="news?.hidden_flag == 0 ? 'red' : 'green'">
                 {{ news?.hidden_flag == 0 ? 'Hidden' : 'Visible' }}
               </v-chip>
             </v-card-title>
             <v-card-subtitle>
-              <b>Created Date: {{ news?.created_at }}</b>
+              <b>Created Date: {{ convertDate(news?.created_at) }}</b>
+            </v-card-subtitle>
+            <v-card-subtitle>
+              <b>Last Update: {{ convertDate(news?.updated_at) }}</b>
             </v-card-subtitle>
           </v-col>
           <v-col cols="6" class="text-right my-2">
@@ -95,6 +98,8 @@ import { useNewsStore } from '@/stores/news'
 import { useAuthStore } from '@/stores/auth'
 import DialogCreateNews from '@/components/Dialog/News/CreateNews.vue'
 import DialogEditNews from '@/components/Dialog/News/EditNews.vue'
+import { convertDate } from '@/utils/date'
+
 const newsStore = useNewsStore()
 const getNews = computed(() => newsStore.getNews())
 const route = useRoute()
@@ -207,12 +212,12 @@ const handlePreview = async (id) => {
   letter-spacing: 0.0071428571em;
 }
 .primary-button {
-  background-color: #002469;
+  background-color: #005eb8;
   color: white;
 }
 
 .primary-button:hover {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 .save-button {
