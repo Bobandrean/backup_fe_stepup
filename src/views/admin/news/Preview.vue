@@ -13,7 +13,7 @@
               {{ getDetailNews.title }}
             </v-card-title>
             <v-card-subtitle> Created Date : {{ getDetailNews.created_at }} </v-card-subtitle>
-            <v-img style="height: 340px" :src="getDetailNews?.image"></v-img>
+            <v-img style="height: 340px" :src="getDetailNews?.image_url"></v-img>
             <v-card-text>
               {{ getDetailNews.content }}
             </v-card-text>
@@ -29,7 +29,7 @@
           label="Select"
           v-model="selectedFile"
           item-title="filename"
-          item-value="filepath"
+          item-value="file_path"
           :items="getDetailNews.files"
         ></v-select>
       </v-col>
@@ -39,19 +39,10 @@
         </div>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
-        <div class="d-flex justify-space-between">
-          <v-btn @click="handlePrevPdf" color="primary">Prev</v-btn>
-          <span>{{ page }} / {{ pages }}</span>
-          <v-btn @click="handleNextPdf" color="primary">Next</v-btn>
-        </div>
-      </v-col>
-    </v-row>
-
+    {{ selectedFile }}
     <div class="d-flex justify-center">
       <!-- <VuePDF :pdf="pdf" :page="page" /> -->
-      <iframe :src="selectedFile" frameborder="0"></iframe>
+      <iframe :src="selectedFile" frameborder="0" width="800" height="600"></iframe>
       <!-- <iframe
         src="https://dev-stepup.hrultra.com/backend/storage/documents/1686689676.anti.pdf"
         frameborder="0"

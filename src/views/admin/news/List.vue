@@ -18,7 +18,7 @@
   </v-row>
 
   <v-row>
-    <v-col cols="12" sm="6" md="4" align="center" v-for="news in getNews?.data" :key="news.id">
+    <v-col cols="12" sm="6" md="4" align="center" v-for="news in getNews" :key="news.id">
       <v-card>
         <v-card-title class="v-card--title justify-center">
           {{ news?.title }}

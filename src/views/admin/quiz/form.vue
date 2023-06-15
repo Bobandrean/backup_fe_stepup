@@ -15,12 +15,6 @@
           v-model="state.moduleName"
           label="Module Name"
         ></v-text-field>
-        <v-text-field
-          v-model="state.published_at"
-          variant="outlined"
-          label="Published at"
-          type="date"
-        ></v-text-field>
         <v-row>
           <v-col md="4">
             <v-text-field
@@ -101,7 +95,6 @@ const state = reactive({
   start_date: '',
   end_date: '',
   per_page: '',
-  published_at: '',
   questions: [
     {
       title: '',
@@ -136,6 +129,7 @@ const handleSubmit = () => {
   console.log(state)
   quizStore.createQuiz(state).then(() => {
     quizStore.fetchQuiz()
+    window.history.back()
   })
 }
 

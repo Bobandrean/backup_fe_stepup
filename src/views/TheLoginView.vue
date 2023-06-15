@@ -1,28 +1,20 @@
 <template>
-  <v-container class="main-container">
-    <v-container class="login-container">
-      <v-card class="login-card">
-        <v-card-title class="text-center roboto-font white--text">Welcome to Step-up</v-card-title>
-        <v-card-text>
-          <v-form @submit.prevent="handleLogin">
-            <v-text-field
-              v-model="form.email"
-              label="Email"
-              required
-              variant="solo-filled"
-            ></v-text-field>
-            <v-text-field
-              v-model="form.password"
-              label="Password"
-              type="password"
-              required
-              variant="solo-filled"
-            ></v-text-field>
-            <v-btn type="submit" class="custom-button" block>Login</v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-container>
+  <v-container class="login-container">
+    <v-card class="login-card">
+      <v-card-title class="text-center roboto-font">Welcome to Step-up</v-card-title>
+      <v-card-text>
+        <v-form @submit.prevent="handleLogin">
+          <v-text-field
+            v-model="form.email"
+            label="Email"
+            required
+            variant="solo-filled"
+          ></v-text-field>
+
+          <v-btn type="submit" class="custom-button" block>Login</v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
@@ -57,7 +49,7 @@ const handleLogin = async () => {
     } else if (position === undefined) {
       router.push('/blank') // Redirect to the login page
     } else {
-      router.push('/blank')
+      router.push('/user')
     }
   })
 }

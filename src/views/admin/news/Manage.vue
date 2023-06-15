@@ -40,9 +40,8 @@
       </v-row>
     </v-col>
   </v-row>
-
   <v-row>
-    <v-col cols="12" v-for="news in getNews?.data" :key="news.id">
+    <v-col cols="12" v-for="news in getNews" :key="news.id">
       <v-card class="card-news mt-2 mb-2">
         <v-row>
           <v-col cols="6">

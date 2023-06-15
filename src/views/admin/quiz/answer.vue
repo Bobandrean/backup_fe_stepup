@@ -54,16 +54,14 @@ const is_selected = ref(false) // Set it to `true` for checked, or `false` for u
 // Initialize selectedChoices for each question
 
 const handleBack = () => {
-  // perform logout logic
-
-  // redirect to login page
+ 
   router.push('/admin/quiz/manage')
 }
 
 const handleSubmit = () => {
   console.log(getDetailQuiz.value)
   quizStore.createAnswerQuiz(route.params.id, getDetailQuiz.value).then(() => {
-    // router.push('/admin')
+    window.history.back()
   })
 }
 </script>

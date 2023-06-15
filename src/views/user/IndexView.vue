@@ -1,73 +1,66 @@
-<template>
-  <div>
-    <h1 class="separator">
-      <span class="separator-line"></span>
-      <span class="separator-text">News</span>
-      <span class="separator-line"></span>
-    </h1>
-  </div>
-
-  <div>
-    <v-row>
-      <v-col cols="12" sm="6" md="4" v-for="news in getDashboardNews?.data" :key="news.id">
-        <v-card class="mx-auto" max-width="344">
-          <v-img :src="news?.image" height="200px" cover></v-img>
-
-          <v-card-title align="center"> {{ news.title }} </v-card-title>
-
-          <v-card-subtitle> {{ news?.slug }} </v-card-subtitle>
-
-          <v-card-actions>
-            <v-btn @click="handlePreview(news?.id)" outlined class="mb-5 mt-5 detail-button"
+<template style="min-height: 100vh">
+  <div v-if="getDashboardNews && getDashboardNews?.length > 0">
+    <div>
+      <h1 class="separator">
+        <span class="separator-line"></span>
+        <span class="separator-text">News</span>
+        <span class="separator-line"></span>
+      </h1>
+    </div>
+    <div>
+      <v-row>
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+          align="center"
+          v-for="news in getDashboardNews"
+          :key="news.id"
+        >
+          <v-card>
+            <v-card-title class="v-card--title justify-center">
+              {{ news?.title }}
+            </v-card-title>
+            <v-img style="height: 140px" :src="news?.image"></v-img>
+            <v-card-text class="v-card--title justify-center">
+              {{ news?.short_content }}
+            </v-card-text>
+            <v-btn @click="handlePreview(news?.id)" outlined class="mb-5 mt-5 primary-button"
               >More Details</v-btn
             >
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+  </div>
+  <div style="min-height: 100vh">
+    <div v-if="getDashboardQuiz">
+      <h1 class="separator">
+        <span class="separator-line"></span>
+        <span class="separator-text">Quiz</span>
+        <span class="separator-line"></span>
+      </h1>
+    </div>
 
-            <v-spacer></v-spacer>
-
-            <v-btn
-              :icon="show ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-              @click="show = !show"
-            ></v-btn>
-          </v-card-actions>
-
-          <v-expand-transition>
-            <div v-show="show">
-              <v-divider></v-divider>
-
-              <v-card-text> {{ news?.short_content }} </v-card-text>
+    <div>
+      <v-row>
+        <v-col cols="12" sm="6" md="4" v-for="quiz in getDashboardQuiz" :key="quiz.id">
+          <v-card class="mx-auto" max-width="344">
+            <div class="d-flex align-center justify-center">
+              <v-card-title> {{ quiz.module_name.toUpperCase() }} </v-card-title>
             </div>
-          </v-expand-transition>
-        </v-card>
-      </v-col>
-    </v-row>
-  </div>
-
-  <div>
-    <h1 class="separator">
-      <span class="separator-line"></span>
-      <span class="separator-text">Quiz</span>
-      <span class="separator-line"></span>
-    </h1>
-  </div>
-
-  <div>
-    <v-row>
-      <v-col cols="12" sm="6" md="4" v-for="quiz in getDashboardQuiz" :key="quiz.id">
-        <v-card class="mx-auto" max-width="344">
-          <div class="d-flex align-center justify-center">
-            <v-card-title> {{ quiz.module_name.toUpperCase() }} </v-card-title>
-          </div>
-          <div class="d-flex align-center justify-center">
-            <v-card-subtitle
-              ><b>Periode : {{ quiz.start_date }} - {{ quiz.end_date }}</b>
-            </v-card-subtitle>
-          </div>
-          <v-card-actions class="d-flex justify-center">
-            <v-btn color="primary" variant="tonal" @click="handleAnswer(quiz.id)">Take Test</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+            <div class="d-flex align-center justify-center">
+              <v-card-subtitle
+                ><b>Periode : {{ quiz.start_date }} - {{ quiz.end_date }}</b>
+              </v-card-subtitle>
+            </div>
+            <v-card-actions class="d-flex justify-center">
+              <v-btn class="primary-button" @click="handleAnswer(quiz.id)">Take Test</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
   </div>
 </template>
 
@@ -92,11 +85,11 @@ onMounted(() => {
 })
 
 const handlePreview = async (id) => {
-  router.push(`/admin/news/preview/${id}`)
+  router.push(`/user/news/preview/${id}`)
 }
 
 const handleAnswer = async (id) => {
-  router.push(`/admin/quiz/answer/${id}`)
+  router.push(`/user/quiz/answer/${id}`)
 }
 
 const show = ref(false)
@@ -118,5 +111,23 @@ const show = ref(false)
 .separator-text {
   margin: 0 10px;
   font-weight: medium;
+}
+
+.primary-button {
+  background-color: #002469;
+  color: white;
+}
+
+.primary-button:hover {
+  background-color: #002469;
+}
+
+.save-button {
+  background-color: green;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: darkgreen;
 }
 </style>
