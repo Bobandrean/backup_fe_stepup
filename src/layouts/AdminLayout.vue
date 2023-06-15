@@ -138,7 +138,7 @@ const handleLogOut = async () => {
 }
 </script>
 
-<style>
+<style scoped>
 #inspire .v-app-bar {
   background-color: #002469;
 }
@@ -151,11 +151,7 @@ const handleLogOut = async () => {
   color: #002469;
 }
 
-#inspire .v-btn {
-  color: white;
-}
-
-.sidebar-card {
+÷ .sidebar-card {
   height: 100vh;
   top: 0px;
   transform: translateX(0%);
