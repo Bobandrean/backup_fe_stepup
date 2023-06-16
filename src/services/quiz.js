@@ -31,6 +31,7 @@ class QuizServices {
     return res
   }
 
+  
   async detailQuiz({
     id
   }) {

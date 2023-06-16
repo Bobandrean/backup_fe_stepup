@@ -6,6 +6,11 @@ export const convertDate = (date) => {
   if (!date) return '-'
   return format(new Date(date), 'dd MMMM yyyy', { locale: id })
 }
+export const convertDateToForm = (date) => {
+  if (!date) return '-'
+  return format(new Date(date), 'dd MM yyyy', { locale: id })
+}
+
 
 // convert date to format sql date
 export const convertDateSql = (date) => {
