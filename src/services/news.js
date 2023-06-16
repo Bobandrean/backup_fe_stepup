@@ -10,10 +10,10 @@ class NewsServices {
   async createNews({ payload }) {
     const formData = new FormData()
     formData.append('title', payload.title)
-    formData.append('slug', payload.slug)
     formData.append('content', payload.content)
-    formData.append('short_content', payload.short_content)
-    formData.append('image', payload.image[0])
+    payload.files.forEach((file, index) => {
+      formData.append(`files[${index}][file]`, file)
+    })
     const res = await Api.doPost(`news/create`, formData)
     return res
   }
@@ -36,13 +36,10 @@ class NewsServices {
   async updateNews({ id, payload }) {
     const formData = new FormData()
     formData.append('title', payload.title)
-    formData.append('slug', payload.slug)
     formData.append('content', payload.content)
-    formData.append('short_content', payload.short_content)
-
-    if (payload?.image?.length > 0) {
-      formData.append('image', payload.image[0])
-    }
+    payload.files.forEach((file, index) => {
+      formData.append(`files[${index}][file]`, file)
+    })
 
     const res = await Api.doPost(`news/update/${id}`, formData)
     return res

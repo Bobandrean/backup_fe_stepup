@@ -34,15 +34,22 @@
       <v-row align="center">
         <v-col cols="4" align="center"> Page </v-col>
         <v-col cols="4">
-          <v-select :items="['1']" variant="outlined"></v-select>
+          <v-select
+            item-value="label"
+            item-title="label"
+            :items="getTotalPages"
+            @update:model-value="handlePage($event)"
+            variant="outlined"
+          ></v-select>
         </v-col>
-        <v-col cols="4" align="center"> Of 1 </v-col>
+        <v-col cols="4" align="center"> Of {{ getNews?.data?.last_page }} </v-col>
       </v-row>
     </v-col>
   </v-row>
-  <v-row>
-    <v-col cols="12" v-for="news in getNews" :key="news.id">
-      <v-card class="card-news pa-3">
+
+  <v-row v-if="getNews">
+    <v-col cols="12" v-for="news in getNews?.data?.data" :key="news.id">
+      <v-card class="pa-3">
         <v-row>
           <v-col cols="6">
             <v-card-title class="news-title">{{ news?.title }}</v-card-title>
@@ -59,7 +66,7 @@
               <b>Last Update: {{ convertDate(news?.updated_at) }}</b>
             </v-card-subtitle>
           </v-col>
-          <v-col cols="6" class="text-right my-2">
+          <v-col cols="6" class="text-right my-2" align-self="center">
             <v-btn class="mb-2 mr-2 primary-button" @click="handlePreview(news?.id)" color="green"
               >Preview</v-btn
             >
@@ -91,22 +98,40 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
-import { ref, computed, onMounted, reactive, watchEffect } from 'vue'
+import { ref, onMounted, reactive, watchEffect, computed } from 'vue'
 import { useNewsStore } from '@/stores/news'
-import { useAuthStore } from '@/stores/auth'
+
 import DialogCreateNews from '@/components/Dialog/News/CreateNews.vue'
 import DialogEditNews from '@/components/Dialog/News/EditNews.vue'
 import { convertDate } from '@/utils/date'
 
 const newsStore = useNewsStore()
-const getNews = computed(() => newsStore.getNews())
-const route = useRoute()
 
 const search = reactive({
   searchTitle: '',
   orderBy: ''
+})
+
+
+const getNews = computed(() => {
+  return newsStore.getNews
+})
+
+const getTotalPages = computed(() => {
+  const array = []
+
+  newsStore.getNews?.data?.links.forEach((element) => {
+    array.push(element.label)
+  })
+
+  array.pop()
+  array.shift()
+
+  console.log(array)
+
+  return array
 })
 
 watchEffect(() => {
@@ -128,12 +153,6 @@ const handleSort = async () => {
 
 onMounted(() => {
   newsStore.fetchNews('')
-})
-
-const authStore = useAuthStore()
-const getUsers = computed(() => authStore.getUsers)
-onMounted(() => {
-  authStore.fetchUsers()
 })
 
 const refCreateNews = ref('')
@@ -163,6 +182,16 @@ const router = useRouter()
 
 const handlePreview = async (id) => {
   router.push(`/admin/news/preview/${id}`)
+}
+
+const handlePage = async (page) => {
+  console.log(page)
+
+  const payload = {
+    page
+  }
+
+  newsStore.fetchNews(payload)
 }
 </script>
 

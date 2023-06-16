@@ -1,10 +1,15 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" :max-width="maxWidth" v-bind="$attrs">
-      <v-card :class="className">
+    <v-dialog
+      v-model="dialog"
+      transition="dialog-bottom-transition"
+      :max-width="maxWidth"
+      v-bind="$attrs"
+    >
+      <v-card :class="className" class="pa-3">  
         <div class="relative">
-          <div class="absolute" style="right: 0; top: 5px">
-            <v-btn text icon color="red lighten-2" @click="close">
+          <div class="absolute" style="right: 0; top: 15px">
+            <v-btn variant="text" icon color="red lighten-2" @click="close">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </div>
@@ -19,16 +24,16 @@ export default {
   props: {
     className: {
       type: String,
-      default: '',
+      default: ''
     },
     maxWidth: {
       type: Number,
-      default: 500,
-    },
+      default: 800
+    }
   },
   data() {
     return {
-      dialog: false,
+      dialog: false
     }
   },
   methods: {
@@ -37,8 +42,8 @@ export default {
     },
     close() {
       this.dialog = false
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
