@@ -5,6 +5,8 @@
       <button class="text-button" @click="handleBack">
         <v-icon>mdi-chevron-left</v-icon> Quiz Management
       </button>
+      {{ state }}
+
     </v-col>
   </v-row>
 
@@ -14,13 +16,13 @@
         <v-text-field variant="outlined" v-model="state.moduleName" label="Module Name"></v-text-field>
         <v-row>
           <v-col md="4">
-            <v-text-field v-model="state.start_date" variant="outlined" label="Period Start" type="date"></v-text-field>
+            <v-text-field v-model="state.startDate" variant="outlined" label="Period Start" type="date"></v-text-field>
           </v-col>
           <v-col md="4">
-            <v-text-field v-model="state.end_date" variant="outlined" label="Period End" type="date"></v-text-field>
+            <v-text-field v-model="state.endDate" variant="outlined" label="Period End" type="date"></v-text-field>
           </v-col>
           <v-col md="4">
-            <v-text-field v-model="state.per_page" variant="outlined" label="Questions Per Page"
+            <v-text-field v-model="state.perPage" variant="outlined" label="Questions Per Page"
               type="number"></v-text-field>
           </v-col>
         </v-row>
@@ -35,7 +37,7 @@
 
           <!-- Choices -->
           <span>Choice :</span>
-          <v-row v-for="(choice, choiceIndex) in question.choices" :key="choiceIndex">
+          <v-row v-for="(choice, choiceIndex) in question.choice" :key="choiceIndex">
             <v-col md="10">
               <v-text-field @click:append-inner="deleteChoice(questionIndex, choiceIndex)" variant="outlined"
                 v-model="choice.text" append-inner-icon="mdi-delete"></v-text-field>
@@ -58,6 +60,7 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
+import { convertDateSql } from '@/utils/date'
 
 import { ref, computed, onMounted, reactive, watchEffect, watch, toRaw } from 'vue'
 import { useQuizStore } from '@/stores/quiz'
@@ -65,28 +68,56 @@ import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 // const quizStore = useQuizStore()
-const getDetailQuiz = computed(() => quizStore.getDetailQuiz)
-onMounted(() => {
-  quizStore.fetchDetailQuiz(route.params.id)
-  
+
+const state = reactive({
+  moduleName: '',
+  startDate: '',
+  endDate: '',
+  perPage: '',
+  questions: [],
+  // {
+  //   title: '',
+  //   choices: [{ text: '', is_correct: false }]
+  // }
+  // ]
 })
+const getDetailQuiz = computed(() => quizStore.getDetailQuiz)
+onMounted(async () => {
+  await quizStore.fetchDetailQuiz(route.params.id)
+  console.log(getDetailQuiz.value.module_name, 'getDetailQuiz')
+  const data = getDetailQuiz.value;
+  state.moduleName = data.module_name
+  // state.startDate =data.created_at
+  state.startDate = convertDateSql(data.start_date)
+  state.endDate = convertDateSql(data.end_date)
+  state.perPage = data.per_page
+
+  console.log(data, 'state')
+
+  data.question.forEach((value, key) => {
+    const question = { title: value.title, choice: [] };
+
+    value.choice.forEach((choice, keys) => {
+      question.choice.push({ text: choice.choice_text, is_correct: choice.is_correct === "1" ? true : false });
+      // question.choice.push();
+
+      console.log(choice, 'choice');
+    });
+
+    state.questions.push(question);
+  });
+  console.log(state.questions[0])
+
+
+  // question.title
+  state.moduleName = data.module_name
+})
+console.log(state, 'element')
+
 
 const quizStore = useQuizStore()
 const getQuiz = computed(() => quizStore.getQuiz())
 
-const state = reactive({
-  // getDetailQuiz.moduleName ? getDetailQuiz.moduleName : 
-  moduleName: '',
-  start_date: '',
-  end_date: '',
-  per_page: '',
-  questions: [
-    {
-      title: '',
-      choices: [{ text: '', is_correct: false }]
-    }
-  ]
-})
 
 const addQuestion = () => {
   state.questions.push({
@@ -125,13 +156,9 @@ const search = reactive({
   orderBy: ''
 })
 
-watch(getDetailQuiz.value, (val) => {
-console.log(val, 'getdetail')
-  // await console.log(val )
-  // const value=toRaw(val)
-  // console.log(val/value)
-
-  // console.log(getDetailQuiz, 'getdetailquiz')
+watch(getDetailQuiz, (val) => {
+  console.log(val.total, 'getdetail')
+ 
 })
 
 watchEffect(() => {
