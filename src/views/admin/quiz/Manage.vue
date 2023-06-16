@@ -6,23 +6,15 @@
       </button>
     </v-col>
     <v-col md="4">
-      <v-text-field
-        v-model="search.searchTitle"
-        label="Search"
-        variant="outlined"
-        append-inner-icon="mdi-magnify"
-      ></v-text-field>
+      <v-text-field v-model="search.searchTitle" label="Search" variant="outlined"
+        append-inner-icon="mdi-magnify"></v-text-field>
     </v-col>
     <v-col md="4">
       <v-row>
         <v-col md="2" no-gutters align="center" class="mt-4"> Sort By : </v-col>
         <v-col md="10" no-gutters align="center">
-          <v-select
-            v-model="search.orderBy"
-            @update:model-value="handleSort()"
-            :items="['newest', 'oldest', 'titled']"
-            variant="outlined"
-          ></v-select>
+          <v-select v-model="search.orderBy" @update:model-value="handleSort()" :items="['newest', 'oldest', 'titled']"
+            variant="outlined"></v-select>
         </v-col>
       </v-row>
     </v-col>
@@ -30,7 +22,8 @@
       <v-row>
         <v-col md="1" align="center" class="mt-4"> Page </v-col>
         <v-col md="9">
-          <v-select :items="['1']" variant="outlined"></v-select>
+          <v-select v-model="search.page" @change:model-value="handleSelectedPage()" :items="['1', '2']"
+            variant="outlined"></v-select>
         </v-col>
         <v-col md="2" align="center" class="mt-4"> Of 1 </v-col>
       </v-row>
@@ -39,7 +32,7 @@
 
   <v-row style="min-height: 100vh">
     <v-col md="12">
-      <v-card class="card-news mt-2 mb-2" v-for="quiz in getQuiz" :key="quiz.id">
+      <v-card class="card-news mt-2 mb-2" v-for="quiz in getQuiz.data" :key="quiz.id">
         <v-row>
           <v-col md="5">
             <v-card-title class="news-title">
@@ -55,17 +48,15 @@
           </v-col>
           <v-col md="7">
             <div class="px-4 text-right mt-5">
-              <button
-                class="text-button"
-                @click="handlePreview(quiz?.id)"
-                style="background-color: #cddc39 !important; border-color: #cddc39 !important"
-              >
+              <button class="text-button" @click="handlePreview(quiz?.id)"
+                style="background-color: #cddc39 !important; border-color: #cddc39 !important">
                 Preview
               </button>
-              <button
-                class="text-button"
-                style="background-color: #2196f3 !important; border-color: #2196f3 !important"
-              >
+              <button class="text-button" @click="handleEdit(quiz?.id)"
+                style="background-color: #00000 !important; border-color: #cddc39 !important">
+                edit
+              </button>
+              <button class="text-button" style="background-color: #2196f3 !important; border-color: #2196f3 !important">
                 Report
               </button>
             </div>
@@ -90,10 +81,18 @@ const router = useRouter()
 
 const search = reactive({
   searchTitle: '',
-  orderBy: ''
+  orderBy: '',
+  page: '',
+
 })
+// const selected = reactive({
+//   page: '',
+// })
+
+
 
 watchEffect(() => {
+  console.log(search, 'search')
   const query = {}
   if (search.searchTitle !== '') {
     query.searchTitle = search.searchTitle
@@ -101,13 +100,25 @@ watchEffect(() => {
   if (search.searchorderBy !== '') {
     query.orderBy = search.orderBy
   }
+  if (search.searchPage !== '') {
+    query.page = search.page
+  }
+
+  // console.log(search.page, 'selected')
   quizStore.fetchQuiz(query)
 })
+
 
 const handleSort = async () => {
   const payload = search.orderBy
 
-  console.log(payload)
+  // console.log(payload)
+}
+
+const handleSelectedPage = async () => {
+  const payload = search.page
+
+  // console.log(payload, 'page');
 }
 
 onMounted(() => {
@@ -127,6 +138,10 @@ const handleCreate = async () => {
 const handlePreview = async (id) => {
   router.push(`/admin/quiz/preview/${id}`)
 }
+const handleEdit = async (id) => {
+  router.push(`/admin/quiz/edit/${id}`)
+}
+
 </script>
 
 <style scoped>
