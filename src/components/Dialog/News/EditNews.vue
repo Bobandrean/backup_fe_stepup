@@ -11,38 +11,39 @@
           required
           variant="outlined"
         ></v-text-field>
-        <v-text-field
-          v-model="formValues.slug"
-          label="Slug"
-          required
-          variant="outlined"
-        ></v-text-field>
-        <v-textarea
+        <QuillEditor
+          style="height: 300px"
+          theme="snow"
+          @update:content="handleContent($event)"
           v-model="formValues.content"
-          label="Content"
+          v-model:content="formValues.content"
+          placeholder="Content"
           required
+          :modules="modules"
+          toolbar="full"
           variant="outlined"
-        ></v-textarea>
-        <v-textarea
-          v-model="formValues.short_content"
-          label=" Short Content"
-          required
-          variant="outlined"
-        ></v-textarea>
+          contentType="html"
+        />
 
-        <p>Preview Image</p>
-        <v-img :src="previewImage" width="200" height="200"></v-img>
-
-        <v-file-input
-          v-model="formValues.image"
-          @change="handleChangePhoto($event)"
-          label="Foto"
-        ></v-file-input>
-        <v-row>
+        <v-row class="mt-3">
           <v-col md="5" align-self="left">
-            <v-btn block color="success"> Add Attachment </v-btn>
+            <v-btn @click="handleAddAttachment" block color="success"> Add Attachment </v-btn>
           </v-col>
         </v-row>
+
+        <div v-for="(file, index) in formValues.files" :key="file">
+          <v-row class="pa-3">
+            <v-col md="10" align-self="center">
+              <p v-if="file.filename">{{ file.filename }}</p>
+              <p v-if="file.name">{{ file.name }}</p>
+            </v-col>
+            <v-col md="2" align-self="center">
+              <v-btn @click="handleDeleteFile(index)" block color="error">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
 
         <v-row>
           <v-col md="6"> </v-col>
@@ -65,6 +66,8 @@
 <script setup>
 import BaseDialog from '@/components/Base/Dialog.vue'
 import { reactive, ref, computed, watch } from 'vue'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useNewsStore } from '@/stores/news'
 
 const newsStore = useNewsStore()
@@ -74,6 +77,7 @@ const formValues = reactive({
   slug: '',
   content: '',
   short_content: '',
+  files: [],
   image: null
 })
 
@@ -86,17 +90,29 @@ watch(getDetailNews, (val) => {
   id.value = val.id
   formValues.title = val.title
   formValues.content = val.content
-  formValues.short_content = val.short_content
-  formValues.slug = val.slug
-  previewImage.value = val.image
+
+  formValues.files = val.files
 })
 
 const refEditNews = ref('')
+
+const handleAddAttachment = () => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.onchange = (e) => {
+    formValues.files.push(e.target.files[0])
+  }
+  input.click()
+}
 
 const handleSubmit = () => {
   newsStore.updateNews(id.value, formValues).then(() => {
     newsStore.fetchNews('')
     refEditNews.value.close()
   })
+}
+
+const handleContent = (val) => {
+  formValues.content = val
 }
 </script>

@@ -18,15 +18,24 @@
   </v-row>
 
   <v-row>
-    <v-col cols="12" sm="6" md="4" align="center" v-for="news in getNews" :key="news.id">
+    <v-col
+      cols="12"
+      sm="6"
+      md="4"
+      align="center"
+      v-for="news in getNews?.data?.data"
+      :key="news.id"
+    >
       <v-card>
-        <v-card-title class="v-card--title justify-center">
-          {{ news?.title }}
-        </v-card-title>
-        <v-img style="height: 140px" :src="news?.image"></v-img>
-        <v-card-text class="v-card--title justify-center">
-          {{ news?.short_content }}
-        </v-card-text>
+        <v-card>
+          <v-card-title class="v-card--title justify-center">
+            {{ news?.title }}
+          </v-card-title>
+
+          <v-card-text class="v-card--title justify-center">
+            <div style="max-height: 250px" v-html="news?.content"></div>
+          </v-card-text>
+        </v-card>
         <v-btn @click="handlePreview(news?.id)" outlined class="mb-5 mt-5 primary-button"
           >More Details</v-btn
         >
@@ -43,7 +52,7 @@ import { useNewsStore } from '@/stores/news'
 import { useAuthStore } from '@/stores/auth'
 
 const newsStore = useNewsStore()
-const getNews = computed(() => newsStore.getNews())
+const getNews = computed(() => newsStore.getNews)
 
 onMounted(() => {
   newsStore.fetchNews('')

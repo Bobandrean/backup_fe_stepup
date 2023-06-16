@@ -74,6 +74,8 @@ onMounted(() => {
 const quizStore = useQuizStore()
 const getQuiz = computed(() => quizStore.getQuiz())
 
+
+
 const state = reactive({
   // getDetailQuiz.moduleName ? getDetailQuiz.moduleName : 
   moduleName: '',
