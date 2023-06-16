@@ -18,13 +18,15 @@
           :key="news.id"
         >
           <v-card>
-            <v-card-title class="v-card--title justify-center">
-              {{ news?.title }}
-            </v-card-title>
-            <v-img style="height: 140px" :src="news?.image"></v-img>
-            <v-card-text class="v-card--title justify-center">
-              {{ news?.short_content }}
-            </v-card-text>
+            <v-card>
+              <v-card-title class="v-card--title justify-center">
+                {{ news?.title }}
+              </v-card-title>
+
+              <v-card-text class="v-card--title justify-center">
+                <div style="max-height: 250px" v-html="news?.content"></div>
+              </v-card-text>
+            </v-card>
             <v-btn @click="handlePreview(news?.id)" outlined class="mb-5 mt-5 primary-button"
               >More Details</v-btn
             >

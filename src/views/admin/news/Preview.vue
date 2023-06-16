@@ -15,9 +15,9 @@
             <v-card-subtitle>
               Created Date : {{ convertDate(getDetailNews.created_at) }}
             </v-card-subtitle>
-            <v-img style="height: 340px" :src="getDetailNews?.image_url"></v-img>
+
             <v-card-text>
-              {{ getDetailNews.content }}
+              <div v-html="getDetailNews.content"></div>
             </v-card-text>
           </v-card-item>
         </v-card>
@@ -41,20 +41,7 @@
         </div>
       </v-col>
     </v-row>
-    <!-- <v-row>
-      <v-col>
-        <div class="d-flex justify-space-between">
-          <v-btn @click="handlePrevPdf" color="primary" class="text-button">
-            <v-icon>mdi-chevron-left</v-icon> Previous
-          </v-btn>
-          <span class="my-auto">Page {{ page }} of {{ pages }}</span>
-          <v-btn @click="handleNextPdf" color="primary" class="text-button">
-            Next <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-        </div>
-      </v-col>
-    </v-row> -->
-    {{ selectedFile }}
+
     <div class="d-flex justify-center mt-5">
       <iframe :src="selectedFile" width="800px" height="800px" frameborder="1"></iframe>
     </div>
