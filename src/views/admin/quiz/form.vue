@@ -18,15 +18,6 @@
           v-model="state.moduleName"
           label="Module Name"
         ></v-text-field>
-        <span style="color:red" v-if="v$.published_at.$error">
-        {{ v$.published_at.$errors[0].$message }}
-      </span>
-        <v-text-field
-          v-model="state.published_at"
-          variant="outlined"
-          label="Published at"
-          type="date"
-        ></v-text-field>
         <v-row>
           <v-col md="4">
             <span style="color:red" v-if="v$.start_date.$error">
@@ -122,7 +113,6 @@ const state = reactive({
   start_date: '',
   end_date: '',
   per_page: '',
-  published_at: '',
   questions: [
     {
       title: '',
@@ -179,6 +169,7 @@ const handleSubmit = () => {
   else{
   quizStore.createQuiz(state).then(() => {
     quizStore.fetchQuiz()
+    window.history.back()
   })
 }
 }
@@ -220,8 +211,8 @@ onMounted(() => {
   height: 36px;
   min-width: 64px;
   padding: 0 16px;
-  background-color: #002469 !important;
-  border-color: #002469 !important;
+  background-color: #005eb8 !important;
+  border-color: #005eb8 !important;
   color: #fff;
 }
 

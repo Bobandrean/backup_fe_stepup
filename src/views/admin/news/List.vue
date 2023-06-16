@@ -18,7 +18,7 @@
   </v-row>
 
   <v-row>
-    <v-col cols="12" sm="6" md="4" align="center" v-for="news in getNews?.data" :key="news.id">
+    <v-col cols="12" sm="6" md="4" align="center" v-for="news in getNews" :key="news.id">
       <v-card>
         <v-card-title class="v-card--title justify-center">
           {{ news?.title }}
@@ -34,7 +34,7 @@
     </v-col>
   </v-row>
 </template>
-  
+
 <script setup>
 import { useRouter } from 'vue-router'
 
@@ -61,7 +61,7 @@ const handlePreview = async (id) => {
   router.push(`/admin/news/preview/${id}`)
 }
 </script>
-  
+
 <style scoped>
 .text-button {
   margin-top: 10px;
@@ -69,8 +69,8 @@ const handlePreview = async (id) => {
   height: 36px;
   min-width: 64px;
   padding: 0 16px;
-  background-color: #002469 !important;
-  border-color: #002469 !important;
+  background-color: #005eb8 !important;
+  border-color: #005eb8 !important;
   color: #fff;
 }
 
@@ -158,12 +158,12 @@ const handlePreview = async (id) => {
   position: relative;
 }
 .primary-button {
-  background-color: #002469;
+  background-color: #005eb8;
   color: white;
 }
 
 .primary-button:hover {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 .save-button {

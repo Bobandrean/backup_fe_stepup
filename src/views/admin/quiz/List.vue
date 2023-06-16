@@ -1,4 +1,4 @@
-<template >
+<template>
   <v-row style="min-height: 100vh" class="mt-5">
     <v-col md="6" align="center" v-for="quiz in getQuiz" :key="quiz.id">
       <v-card>
@@ -6,7 +6,8 @@
           {{ quiz?.module_name }}
         </v-card-title>
         <v-card-text class="justify-center">
-          Period : {{ quiz?.start_date }} - {{ quiz?.end_date }}
+          Period : {{ convertDateManualToIndo(quiz?.start_date) }} -
+          {{ convertDateManualToIndo(quiz?.end_date) }}
         </v-card-text>
         <v-btn @click="handlePreview(quiz?.id)" outlined class="mb-5 mt-5 primary-button"
           >See Answer</v-btn
@@ -22,6 +23,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { ref, computed, onMounted, reactive, watchEffect } from 'vue'
 import { useQuizStore } from '@/stores/quiz'
 import { useAuthStore } from '@/stores/auth'
+import { convertDateManualToIndo } from '../../../utils/date'
+
 const quizStore = useQuizStore()
 const getQuiz = computed(() => quizStore.getQuiz())
 const route = useRoute()
@@ -71,8 +74,8 @@ const handlePreview = async (id) => {
   height: 36px;
   min-width: 64px;
   padding: 0 16px;
-  background-color: #002469 !important;
-  border-color: #002469 !important;
+  background-color: #005eb8 !important;
+  border-color: #005eb8 !important;
   color: #fff;
 }
 
@@ -165,12 +168,12 @@ const handlePreview = async (id) => {
 }
 
 .primary-button {
-  background-color: #002469;
+  background-color: #005eb8;
   color: white;
 }
 
 .primary-button:hover {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 .save-button {

@@ -54,16 +54,14 @@ const is_selected = ref(false) // Set it to `true` for checked, or `false` for u
 // Initialize selectedChoices for each question
 
 const handleBack = () => {
-  // perform logout logic
-
-  // redirect to login page
+ 
   router.push('/admin/quiz/manage')
 }
 
 const handleSubmit = () => {
   console.log(getDetailQuiz.value)
   quizStore.createAnswerQuiz(route.params.id, getDetailQuiz.value).then(() => {
-    // router.push('/admin')
+    window.history.back()
   })
 }
 </script>
@@ -75,8 +73,8 @@ const handleSubmit = () => {
   height: 36px;
   min-width: 64px;
   padding: 0 16px;
-  background-color: #002469 !important;
-  border-color: #002469 !important;
+  background-color: #005eb8 !important;
+  border-color: #005eb8 !important;
   color: #fff;
 }
 
@@ -139,12 +137,12 @@ const handleSubmit = () => {
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 .primary-button {
-  background-color: #002469;
+  background-color: #005eb8;
   color: white;
 }
 
 .primary-button:hover {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 .save-button {

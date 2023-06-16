@@ -51,7 +51,10 @@
             </div>
             <div class="d-flex align-center justify-center">
               <v-card-subtitle
-                ><b>Periode : {{ quiz.start_date }} - {{ quiz.end_date }}</b>
+                ><b
+                  >Periode : {{ convertDateManualToIndo(quiz?.start_date) }} -
+                  {{ convertDateManualToIndo(quiz.end_date) }}</b
+                >
               </v-card-subtitle>
             </div>
             <v-card-actions class="d-flex justify-center">
@@ -66,6 +69,7 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
+import { convertDateManualToIndo } from '../../utils/date'
 
 import { ref, computed, onMounted, reactive, watchEffect } from 'vue'
 import { useDashboardStore } from '@/stores/dashboard'
@@ -92,6 +96,10 @@ const handleAnswer = async (id) => {
   router.push(`/admin/quiz/answer/${id}`)
 }
 
+const convertDateHandle = (date) => {
+  return convertDate(date)
+}
+
 const show = ref(false)
 </script>
 
@@ -114,12 +122,12 @@ const show = ref(false)
 }
 
 .primary-button {
-  background-color: #002469;
+  background-color: #005eb8;
   color: white;
 }
 
 .primary-button:hover {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 .save-button {

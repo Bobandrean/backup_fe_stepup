@@ -145,7 +145,7 @@ const router = createRouter({
     {
       path: "/user",
       name: "user",
-      component: () => import("../layouts/AdminLayout.vue"),
+      component: () => import("../layouts/GuestLayout.vue"),
       children: [{
           path: "",
           name: "user-home",
@@ -154,8 +154,16 @@ const router = createRouter({
 
       ],
     },
-
-
+    {
+      path: '/admin/news/preview/:id',
+      name: "preview",
+      component: () => import("../layouts/GuestLayout.vue"),
+      children: [{
+        path: "",
+        name: "news-preview",
+        component: () => import("../views/admin/news/Preview.vue"),
+      }, ],
+    },
   ],
 });
 

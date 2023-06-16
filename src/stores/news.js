@@ -14,7 +14,7 @@ export const useNewsStore = defineStore('news', () => {
 
     const getNews = () => {
         return news.value;
-      };
+    };
 
     const getDetailNews = computed(() => detailNews.value)
 
@@ -26,10 +26,10 @@ export const useNewsStore = defineStore('news', () => {
         detailNews.value = data
     }
 
-    const fetchNews = async (payload)  => {
+    const fetchNews = async (payload) => {
         const query = {
             orderBy: payload.orderBy ? payload.orderBy : "",
-          searchTitle:  payload.searchTitle ? payload.searchTitle : "",
+            searchTitle: payload.searchTitle ? payload.searchTitle : "",
         };
         try {
 
@@ -62,8 +62,8 @@ export const useNewsStore = defineStore('news', () => {
             })
             Swal.fire({
                 icon: "success",
-                title: "Berhasil Membuat News",
-                text: "^_^",
+                title: "Success",
+                text: "Berhasil Membuat News",
             });
             return res
 
@@ -79,6 +79,11 @@ export const useNewsStore = defineStore('news', () => {
                 id,
                 payload
             })
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Berhasil Mengubah News",
+            });
 
             return res
 

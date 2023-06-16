@@ -7,13 +7,14 @@ class QuizServices {
       .catch((err) => err)
   }
 
-  async createQuiz({ payload }) {
+  async createQuiz({
+    payload
+  }) {
     const convertedPayload = {
       module_name: payload.moduleName,
       per_page: payload.per_page,
       start_date: payload.start_date,
       end_date: payload.end_date,
-      published_at: payload.published_at,
       questions: payload.questions.map((question) => ({
         title: question.title,
         choices: question.choices.map((choice) => ({
@@ -30,12 +31,17 @@ class QuizServices {
     return res
   }
 
-  async detailQuiz({ id }) {
+  async detailQuiz({
+    id
+  }) {
     const res = await Api.doGet(`quiz/detail/${id}`)
     return res
   }
 
-  async answerQuiz({ id, payload }) {
+  async answerQuiz({
+    id,
+    payload
+  }) {
     console.log(payload)
     const convertedPayload = {
       answer: payload.question.map((answer) => ({

@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <v-container class="main-container">
     <v-container class="login-container">
       <v-card class="login-card">
@@ -30,6 +31,24 @@
         </v-card-text>
       </v-card>
     </v-container>
+=======
+  <v-container class="login-container">
+    <v-card class="login-card">
+      <v-card-title class="text-center roboto-font">Welcome to Step-up</v-card-title>
+      <v-card-text>
+        <v-form @submit.prevent="handleLogin">
+          <v-text-field
+            v-model="form.email"
+            label="Email"
+            required
+            variant="solo-filled"
+          ></v-text-field>
+
+          <v-btn type="submit" class="custom-button" block>Login</v-btn>
+        </v-form>
+      </v-card-text>
+    </v-card>
+>>>>>>> 4d54377585ad8d36b80edde5ccb0d7c75838d9bf
   </v-container>
 </template>
 
@@ -87,7 +106,7 @@ else{
     } else if (position === undefined) {
       router.push('/blank') // Redirect to the login page
     } else {
-      router.push('/blank')
+      router.push('/user')
     }
   })
 }
