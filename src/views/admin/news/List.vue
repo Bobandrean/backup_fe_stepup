@@ -26,8 +26,8 @@
       v-for="news in getNews?.data?.data"
       :key="news.id"
     >
-      <v-card>
-        <v-card>
+      <v-card style="height: 100%">
+        <v-card style="height: 77%">
           <v-card-title class="v-card--title justify-center">
             {{ news?.title }}
           </v-card-title>

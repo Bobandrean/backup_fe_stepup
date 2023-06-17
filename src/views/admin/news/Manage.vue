@@ -21,7 +21,7 @@
         append-inner-icon="mdi-magnify"
       ></v-text-field>
     </v-col>
-    <v-col cols="12" sm="4">
+    <!-- <v-col cols="12" sm="4">
       <v-select
         v-model="search.orderBy"
         @update:model-value="handleSort()"
@@ -29,7 +29,7 @@
         variant="outlined"
         label="Sort By"
       ></v-select>
-    </v-col>
+    </v-col> -->
     <v-col cols="12" sm="4">
       <v-row align="center">
         <v-col cols="4" align="center"> Page </v-col>
@@ -113,7 +113,6 @@ const search = reactive({
   searchTitle: '',
   orderBy: ''
 })
-
 
 const getNews = computed(() => {
   return newsStore.getNews

@@ -102,7 +102,7 @@ const handleBack = () => {
   // ...
 
   // redirect to login page
-  router.push('/admin/news/manage')
+  router.back()
 }
 </script>
 

@@ -115,4 +115,9 @@ const handleSubmit = () => {
 const handleContent = (val) => {
   formValues.content = val
 }
+
+const handleDeleteFile = (index) => {
+  formValues.files.splice(index, 1)
+  fileCounter.value--
+}
 </script>

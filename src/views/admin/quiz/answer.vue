@@ -54,8 +54,7 @@ const is_selected = ref(false) // Set it to `true` for checked, or `false` for u
 // Initialize selectedChoices for each question
 
 const handleBack = () => {
- 
-  router.push('/admin/quiz/manage')
+  router.back()
 }
 
 const handleSubmit = () => {
