@@ -52,9 +52,9 @@
               <v-card-title> {{ quiz.module_name.toUpperCase() }} </v-card-title>
             </div>
             <div class="d-flex align-center justify-center">
-              <v-card-subtitle
+              <v-card-subtitle class="subtitle-text"
                 ><b
-                  >Periode : {{ convertDateManualToIndo(quiz?.start_date) }} -
+                  >Periode : {{ convertDateManualToIndo(quiz?.start_date) }}
                   {{ convertDateManualToIndo(quiz.end_date) }}</b
                 >
               </v-card-subtitle>
@@ -139,5 +139,9 @@ const show = ref(false)
 
 .save-button:hover {
   background-color: darkgreen;
+}
+
+.subtitle-text {
+  font-size: 12px; /* Adjust the font size as needed */
 }
 </style>

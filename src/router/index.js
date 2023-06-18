@@ -35,16 +35,7 @@ const router = createRouter({
         component: () => import('../views/admin/IndexView.vue')
       }]
     },
-    {
-      path: '/user',
-      name: 'user',
-      component: () => import('../layouts/AdminLayout.vue'),
-      children: [{
-        path: '',
-        name: 'user-home',
-        component: () => import('../views/user/IndexView.vue')
-      }]
-    },
+
     {
       path: '/blank',
       name: 'blank',
@@ -147,6 +138,17 @@ const router = createRouter({
       }]
     },
     {
+      path: '/admin/news/preview/:id',
+      name: 'preview',
+      component: () => import('../layouts/GuestLayout.vue'),
+      children: [{
+        path: '',
+        name: 'news-preview',
+        component: () => import('../views/admin/news/Preview.vue')
+      }]
+    },
+
+    {
       path: '/user',
       name: 'user',
       component: () => import('../layouts/GuestLayout.vue'),
@@ -157,13 +159,43 @@ const router = createRouter({
       }]
     },
     {
-      path: '/admin/news/preview/:id',
-      name: 'preview',
+      path: '/user/news/list',
+      name: 'list_user',
       component: () => import('../layouts/GuestLayout.vue'),
       children: [{
         path: '',
-        name: 'news-preview',
-        component: () => import('../views/admin/news/Preview.vue')
+        name: 'news-list-user',
+        component: () => import('../views/user/news/List.vue')
+      }]
+    },
+    {
+      path: '/user/quiz/list',
+      name: 'quiz_uzer',
+      component: () => import('../layouts/GuestLayout.vue'),
+      children: [{
+        path: '',
+        name: 'quiz-list-user',
+        component: () => import('../views/user/quiz/List.vue')
+      }]
+    },
+    {
+      path: '/user/news/preview/:id',
+      name: 'preview-user',
+      component: () => import('../layouts/GuestLayout.vue'),
+      children: [{
+        path: '',
+        name: 'news-preview-user',
+        component: () => import('../views/user/news/Preview.vue')
+      }]
+    },
+    {
+      path: '/user/quiz/answer/:id',
+      name: 'qanswer-user',
+      component: () => import('../layouts/GuestLayout.vue'),
+      children: [{
+        path: '',
+        name: 'answer-form-user',
+        component: () => import('../views/admin/quiz/answer.vue')
       }]
     }
   ]

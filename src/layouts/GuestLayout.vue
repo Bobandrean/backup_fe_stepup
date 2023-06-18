@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-navigation-drawer color="#002469" v-model="drawer" location="left" temporary>
+    <v-navigation-drawer color="#005EB8" v-model="drawer" location="left" temporary>
       <v-list nav v-model:opened="open">
         <v-list-item prepend-icon="mdi-home" style="cursor: pointer" @click="goToHome()"
           ><span class="text-item">Home</span></v-list-item
@@ -19,12 +19,12 @@
             style="cursor: pointer"
             @click="goToNewsList"
           ></v-list-item>
-          <v-list-item
+          <!-- <v-list-item
             prepend-icon="mdi-newspaper"
             title="News Management"
             style="cursor: pointer"
             @click="goToNewsManage"
-          ></v-list-item>
+          ></v-list-item> -->
         </v-list-group>
         <v-list-group prepend-icon="mdi-newspaper" value="Quiz Menu">
           <template v-slot:activator="{ props }">
@@ -40,17 +40,17 @@
             style="cursor: pointer"
             @click="goToQuizHistory"
           ></v-list-item>
-          <v-list-item
+          <!-- <v-list-item
             prepend-icon="mdi-format-list-checks"
             title="Quiz Management"
             style="cursor: pointer"
             @click="goToQuizManage"
-          ></v-list-item>
+          ></v-list-item> -->
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar color="#002469" elevation="0" prominent style="z-index: 1">
+    <v-app-bar color="#005EB8" elevation="0" prominent style="z-index: 1">
       <template v-slot:prepend>
         <v-app-bar-nav-icon
           v-model="state.order"
@@ -109,29 +109,17 @@ const state = reactive({
 })
 
 const goToHome = () => {
-  console.log('test')
-  router.push('/admin')
+  router.push('/user')
 }
 
 const goToNewsList = () => {
-  console.log('test')
-  router.push('/admin/news/list')
-}
-
-const goToNewsManage = () => {
-  console.log('test')
-  router.push('/admin/news/manage')
+  router.push('/user/news/list')
 }
 
 const goToQuizHistory = () => {
-  console.log('test')
-  router.push('/admin/quiz/list')
+  router.push('/user/quiz/list')
 }
 
-const goToQuizManage = () => {
-  console.log('test')
-  router.push('/admin/quiz/manage')
-}
 const handleLogOut = async () => {
   await authStore.logout()
   router.push('/login')
@@ -140,15 +128,15 @@ const handleLogOut = async () => {
 
 <style scoped>
 #inspire .v-app-bar {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 #inspire .v-app-bar .v-navigation-drawer__content {
-  color: #002469;
+  color: #005eb8;
 }
 
 .v-navigation-drawer__content {
-  color: #002469;
+  color: #005eb8;
 }
 
 ÷ .sidebar-card {
