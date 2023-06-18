@@ -31,6 +31,32 @@ class QuizServices {
     return res
   }
 
+  async updateQuiz({
+    id,
+    payload
+  }) {
+    console.log(payload, 'payload update')
+    const convertedPayload = {
+      module_name: payload.moduleName,
+      per_page: payload.per_page,
+      start_date: payload.start_date,
+      end_date: payload.end_date,
+      questions: payload.questions.map((question) => ({
+        title: question.title,
+        choice: question.choice.map((choice) => ({
+          choice_text: choice.text,
+          value: choice.value,
+          is_correct: choice.is_correct
+        }))
+      }))
+    }
+
+    console.log('convertedPayload', convertedPayload)
+
+    const res = await Api.doPost(`quiz/update/${id}`, convertedPayload)
+    return res
+  }
+
 
   async detailQuiz({
     id

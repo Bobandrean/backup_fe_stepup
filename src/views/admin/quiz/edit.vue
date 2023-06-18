@@ -9,60 +9,37 @@
   <v-row class="ml-5" v-if="getDetailQuiz">
     <v-col md="12">
       <v-form v-model="valid" @submit.prevent="handleSubmit">
-        <v-text-field
-          variant="outlined"
-          v-model="state.moduleName"
-          label="Module Name"
-        ></v-text-field>
+        <v-text-field variant="outlined" v-model="state.moduleName" label="Module Name"></v-text-field>
         <v-row>
           <v-col md="4">
-            <v-text-field
-              v-model="state.startDate"
-              variant="outlined"
-              label="Period Start"
-              type="date"
-            ></v-text-field>
+            <v-text-field v-model="state.start_date" variant="outlined" label="Period Start" type="date"></v-text-field>
           </v-col>
           <v-col md="4">
-            <v-text-field
-              v-model="state.endDate"
-              variant="outlined"
-              label="Period End"
-              type="date"
-            ></v-text-field>
+            <v-text-field v-model="state.end_date" variant="outlined" label="Period End" type="date"></v-text-field>
           </v-col>
           <v-col md="4">
-            <v-text-field
-              v-model="state.perPage"
-              variant="outlined"
-              label="Questions Per Page"
-              type="number"
-            ></v-text-field>
+            <v-text-field v-model="state.per_page" variant="outlined" label="Questions Per Page"
+              type="number"></v-text-field>
           </v-col>
         </v-row>
         <!-- Form fields -->
         <v-divider></v-divider>
+        <v-btn class="mt-5 mb-5" @click="addQuestion">Add Question</v-btn>
+
         <div v-if="Array.isArray(getDetailQuiz.question) && getDetailQuiz.question.length > 0">
           <!-- Add Question button -->
-          <v-btn class="mt-5 mb-5" @click="addQuestion">Add Question</v-btn>
+          <!-- <v-btn class="mt-5 mb-5" @click="addQuestion">Add Question</v-btn> -->
           <!-- Questions -->
           <div v-for="(question, questionIndex) in state.questions" :key="questionIndex">
-            <v-text-field
-              variant="outlined"
-              v-model="question.title"
-              :label="'Question ' + (questionIndex + 1) + ' Title'"
-            ></v-text-field>
+            <v-text-field variant="outlined" v-model="question.title"
+              :label="'Question ' + (questionIndex + 1) + ' Title'"></v-text-field>
 
             <!-- Choices -->
             <span>Choice :</span>
             <v-row v-for="(choice, choiceIndex) in question.choice" :key="choiceIndex">
               <v-col md="10">
-                <v-text-field
-                  @click:append-inner="deleteChoice(questionIndex, choiceIndex)"
-                  variant="outlined"
-                  v-model="choice.text"
-                  append-inner-icon="mdi-delete"
-                ></v-text-field>
+                <v-text-field @click:append-inner="deleteChoice(questionIndex, choiceIndex)" variant="outlined"
+                  v-model="choice.text" append-inner-icon="mdi-delete"></v-text-field>
               </v-col>
               <v-col md="2">
                 <v-checkbox v-model="choice.is_correct" label="Right Answer"></v-checkbox>
@@ -70,8 +47,10 @@
             </v-row>
 
             <!-- Add Choice button -->
+
             <v-btn class="mb-4" @click="addChoice(questionIndex)">Add Choice</v-btn>
           </div>
+          <!-- <v-btn class="mb-4" @click="addChoice(questionIndex)">Add Choice</v-btn> -->
 
           <!-- Submit button -->
           <v-btn class="mt-5" type="submit">Save</v-btn>
@@ -93,10 +72,12 @@ const route = useRoute()
 // const quizStore = useQuizStore()
 
 const state = reactive({
+
+  id: '',
   moduleName: '',
-  startDate: '',
-  endDate: '',
-  perPage: '',
+  start_date: '',
+  end_date: '',
+  per_page: '',
   questions: []
   // {
   //   title: '',
@@ -110,20 +91,33 @@ onMounted(async () => {
   console.log(getDetailQuiz.value.module_name, 'getDetailQuiz')
   const data = getDetailQuiz.value
   state.moduleName = data.module_name
-  // state.startDate =data.created_at
-  state.startDate = convertDateSql(data.start_date)
-  state.endDate = convertDateSql(data.end_date)
-  state.perPage = data.per_page
+  // state.start_date =data.created_at
+  state.start_date = convertDateSql(data.start_date)
+  state.end_date = convertDateSql(data.end_date)
+  state.per_page = data.per_page
+  // state.published = data.published
+  state.id = data.id
 
   console.log(data, 'state')
 
   data.question.forEach((value, key) => {
-    const question = { title: value.title, choice: [] }
+    const question =
+    {
+      title: value.title,
+      choice: []
+    }
 
     value.choice.forEach((choice, keys) => {
       question.choice.push({
         text: choice.choice_text,
-        is_correct: choice.is_correct === '1' ? true : false
+        is_correct: choice.is_correct === '1' ? true : false,
+        is_selected: choice.is_selected,
+    
+        // "choice_text": "Appleeee",
+        // "is_correct": "1",
+        // "is_selected": "0",
+        // "created_at": "2023-06-15T16:45:38.000000Z",
+        // "updated_at": "2023-06-15T16:45:38.000000Z"
       })
       // question.choice.push();
 
@@ -145,12 +139,12 @@ const getQuiz = computed(() => quizStore.getQuiz())
 const addQuestion = () => {
   state.questions.push({
     title: '',
-    choices: [{ choice_text: '', is_correct: false }]
+    choice: [{ choice_text: '', is_correct: false }]
   })
 }
 
 const addChoice = (questionIndex) => {
-  state.questions[questionIndex].choices.push({
+  state.questions[questionIndex].choice.push({
     choice_text: '',
     is_correct: false
   })
@@ -161,14 +155,16 @@ const deleteQuestion = (questionIndex) => {
 }
 
 const deleteChoice = (questionIndex, choiceIndex) => {
-  state.questions[questionIndex].choices.splice(choiceIndex, 1)
+  state.questions[questionIndex].choice.splice(choiceIndex, 1)
 }
 
 const handleSubmit = () => {
   console.log(state)
-  quizStore.createQuiz(state).then(() => {
-    quizStore.fetchQuiz()
-    window.history.back()
+  quizStore.updateQuiz(state).then((response) => {
+    // createQuiz
+    console.log(response)
+    // quizStore.fetchQuiz()
+    // window.history.back()
   })
 }
 

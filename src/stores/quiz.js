@@ -96,6 +96,26 @@ export const useQuizStore = defineStore('quiz', () => {
     }
   }
 
+  async function updateQuiz(payload) {
+    console.log('clicked')
+    console.log(payload, 'wueheh')
+    const id=payload.id
+    console.log(id);
+    try {
+      const res = await SERVICE.updateQuiz({
+        id,payload
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil Membuat Quiz',
+        text: '^_^'
+      })
+      return res
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   async function deleteQuiz(id) {
     try {
       const res = await SERVICE.deleteQuiz({
@@ -121,7 +141,7 @@ export const useQuizStore = defineStore('quiz', () => {
       Swal.fire({
         icon: 'success',
         title: 'Success',
-        text: 'Berhasil Menghapus Quiz'
+        text: 'Berhasil Publish Quiz'
       })
 
       return res
@@ -141,6 +161,7 @@ export const useQuizStore = defineStore('quiz', () => {
     createAnswerQuiz,
     createQuiz,
     deleteQuiz,
-    publishQuiz
+    publishQuiz,
+    updateQuiz,
   }
 })
