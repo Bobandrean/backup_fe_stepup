@@ -1,5 +1,10 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import {
+  ref,
+  computed
+} from 'vue'
+import {
+  defineStore
+} from 'pinia'
 import SERVICE from '@/services/quiz.js'
 import Swal from 'sweetalert2'
 
@@ -91,6 +96,41 @@ export const useQuizStore = defineStore('quiz', () => {
     }
   }
 
+  async function deleteQuiz(id) {
+    try {
+      const res = await SERVICE.deleteQuiz({
+        id
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Berhasil Menghapus Quiz'
+      })
+
+      return res
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async function publishQuiz(id) {
+    try {
+      const res = await SERVICE.publishQuiz({
+        id
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Berhasil Menghapus Quiz'
+      })
+
+      return res
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
   return {
     quiz,
     getQuiz,
@@ -99,6 +139,8 @@ export const useQuizStore = defineStore('quiz', () => {
     fetchDetailQuiz,
     fetchQuiz,
     createAnswerQuiz,
-    createQuiz
+    createQuiz,
+    deleteQuiz,
+    publishQuiz
   }
 })

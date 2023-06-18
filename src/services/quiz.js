@@ -31,7 +31,7 @@ class QuizServices {
     return res
   }
 
-  
+
   async detailQuiz({
     id
   }) {
@@ -62,6 +62,22 @@ class QuizServices {
     const res = await Api.doPost(`quiz/answer/${id}`, convertedPayload)
     return res
   }
+
+  async deleteQuiz({
+    id
+  }) {
+    const res = await Api.doDelete(`quiz/delete/${id}`)
+    return res
+  }
+
+  async publishQuiz({
+    id
+  }) {
+    const res = await Api.doPost(`quiz/publish/${id}`)
+    return res
+  }
 }
+
+
 
 export default new QuizServices()

@@ -1,5 +1,10 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import {
+  ref,
+  computed
+} from 'vue'
+import {
+  defineStore
+} from 'pinia'
 import SERVICE from '@/services/news.js'
 import Swal from 'sweetalert2'
 
@@ -46,7 +51,9 @@ export const useNewsStore = defineStore('news', () => {
 
   async function createNews(payload) {
     try {
-      const res = await SERVICE.createNews({ payload })
+      const res = await SERVICE.createNews({
+        payload
+      })
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -81,7 +88,11 @@ export const useNewsStore = defineStore('news', () => {
       const res = await SERVICE.hideNews({
         id
       })
-
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Berhasil sembunyikan news'
+      })
       return res
     } catch (error) {
       console.error(error)
@@ -92,6 +103,11 @@ export const useNewsStore = defineStore('news', () => {
     try {
       const res = await SERVICE.showNews({
         id
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Berhasil Menampilkan news'
       })
 
       return res

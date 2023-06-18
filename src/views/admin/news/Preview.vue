@@ -2,7 +2,7 @@
   <div style="margin-top: 15px">
     <v-row>
       <button class="text-button" @click="handleBack">
-        <v-icon>mdi-chevron-left</v-icon> News List
+        <v-icon>mdi-chevron-left</v-icon> Go Back
       </button>
     </v-row>
     <v-row>

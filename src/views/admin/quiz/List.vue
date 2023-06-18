@@ -1,6 +1,6 @@
 <template>
   <v-row style="min-height: 100vh" class="mt-5">
-    <v-col md="6" align="center" v-for="quiz in getQuiz" :key="quiz.id">
+    <v-col md="6" align="center" v-for="quiz in getQuiz.data" :key="quiz.id">
       <v-card>
         <v-card-title class="v-card--title justify-center">
           {{ quiz?.module_name }}

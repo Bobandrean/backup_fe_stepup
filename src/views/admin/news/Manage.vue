@@ -166,15 +166,15 @@ const handleEditNews = (id) => {
 }
 
 const handleShowNews = (id) => {
-  newsStore.hideNews(id)
-  console.log('berhasil')
-  newsStore.fetchNews('')
+  newsStore.hideNews(id).then(() => {
+    newsStore.fetchNews('')
+  })
 }
 
 const handleHideNews = (id) => {
-  newsStore.showNews(id)
-  console.log('berhasil')
-  newsStore.fetchNews('')
+  newsStore.showNews(id).then(() => {
+    newsStore.fetchNews('')
+  })
 }
 
 const router = useRouter()
