@@ -18,13 +18,15 @@
           :key="news.id"
         >
           <v-card>
-            <v-card-title class="v-card--title justify-center">
-              {{ news?.title }}
-            </v-card-title>
-            <v-img style="height: 140px" :src="news?.image"></v-img>
-            <v-card-text class="v-card--title justify-center">
-              {{ news?.short_content }}
-            </v-card-text>
+            <v-card>
+              <v-card-title class="v-card--title justify-center">
+                {{ news?.title }}
+              </v-card-title>
+
+              <v-card-text class="v-card--title justify-center">
+                <div style="max-height: 250px" v-html="news?.content"></div>
+              </v-card-text>
+            </v-card>
             <v-btn @click="handlePreview(news?.id)" outlined class="mb-5 mt-5 primary-button"
               >More Details</v-btn
             >
@@ -50,8 +52,11 @@
               <v-card-title> {{ quiz.module_name.toUpperCase() }} </v-card-title>
             </div>
             <div class="d-flex align-center justify-center">
-              <v-card-subtitle
-                ><b>Periode : {{ quiz.start_date }} - {{ quiz.end_date }}</b>
+              <v-card-subtitle class="subtitle-text"
+                ><b
+                  >Periode : {{ convertDateManualToIndo(quiz?.start_date) }}
+                  {{ convertDateManualToIndo(quiz.end_date) }}</b
+                >
               </v-card-subtitle>
             </div>
             <v-card-actions class="d-flex justify-center">
@@ -66,6 +71,7 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
+import { convertDateManualToIndo } from '../../utils/date'
 
 import { ref, computed, onMounted, reactive, watchEffect } from 'vue'
 import { useDashboardStore } from '@/stores/dashboard'
@@ -92,6 +98,10 @@ const handleAnswer = async (id) => {
   router.push(`/user/quiz/answer/${id}`)
 }
 
+const convertDateHandle = (date) => {
+  return convertDate(date)
+}
+
 const show = ref(false)
 </script>
 
@@ -114,12 +124,12 @@ const show = ref(false)
 }
 
 .primary-button {
-  background-color: #002469;
+  background-color: #005eb8;
   color: white;
 }
 
 .primary-button:hover {
-  background-color: #002469;
+  background-color: #005eb8;
 }
 
 .save-button {
@@ -129,5 +139,9 @@ const show = ref(false)
 
 .save-button:hover {
   background-color: darkgreen;
+}
+
+.subtitle-text {
+  font-size: 12px; /* Adjust the font size as needed */
 }
 </style>

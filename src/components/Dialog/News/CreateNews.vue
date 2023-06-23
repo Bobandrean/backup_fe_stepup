@@ -1,7 +1,7 @@
 <template>
   <BaseDialog ref="refCreateNews">
     <section class="login pa-5 mt-5">
-      <v-row class="mb-5" style="height: 50px">
+      <v-row class="mb-5 px-3">
         <h1 class="text-left">Create News</h1>
       </v-row>
       <v-form v-model="valid" @submit.prevent="handleSubmit">
@@ -20,13 +20,19 @@
           variant="outlined"
         ></v-text-field> -->
         <QuillEditor
+          style="height: 300px"
           theme="snow"
           @update:content="handleContent($event)"
           v-model="formValues.content"
+          v-model:content="formValues.content"
           placeholder="Content"
           required
+          :modules="modules"
+          toolbar="full"
           variant="outlined"
+          contentType="html"
         />
+
         <br />
         <!-- <v-textarea
           v-model="formValues.short_content"
@@ -36,13 +42,14 @@
           variant="outlined"
         > -->
         <!-- </v-textarea> -->
-        <v-file-input
+
+        <!-- <v-file-input
           class="mt-5"
           v-model="formValues.image"
           :rules="[rules.required]"
           @change="handleChangePhoto($event)"
           label="Foto"
-        ></v-file-input>
+        ></v-file-input> -->
 
         <v-row>
           <v-col md="5" align-self="left">
@@ -50,20 +57,24 @@
           </v-col>
         </v-row>
 
-        <!-- <div v-for="(file, index) in formValues.files" :key="file">
-          <v-file-input
-            class="mt-5"
-            :value="formValues.files[index]"
-            @change="handleChangeFile($event, index)"
-            :label="`File ${index + 1}`"
-          ></v-file-input>
-        </div> -->
+        <div v-for="(file, index) in formValues.files" :key="file">
+          <v-row class="pa-3">
+            <v-col md="10" align-self="center">
+              <p>{{ file.name }}</p>
+            </v-col>
+            <v-col md="2" align-self="center">
+              <v-btn @click="handleDeleteFile(index)" block color="error">
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
 
-        <v-row>
+        <v-row class="mt-3">
           <v-col md="6"></v-col>
           <v-col md="3">
             <div class="d-flex justify-end mb-6">
-              <v-btn block color="success">Cancel</v-btn>
+              <v-btn block color="error">Cancel</v-btn>
             </div>
           </v-col>
           <v-col md="3">
@@ -83,7 +94,8 @@ import { reactive, ref, toRefs, computed } from 'vue'
 import { useNewsStore } from '@/stores/news'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { useVuelidate } from '@vuelidate/core'
+import ImageUploader from 'quill-image-uploader'
+
 import { required, minLength } from '@vuelidate/validators'
 
 const newsStore = useNewsStore()
@@ -96,6 +108,22 @@ const formValues = reactive({
   image: '',
   files: []
 })
+
+const fileCounter = ref(0)
+
+// const initialValue = ref(
+//   '<h2>test</h2><img src="https://cse-bob.s3.ap-southeast-1.amazonaws.com/976604-appliances-cell-phone-cellphone-mobile-mobilephone-phone-smartphone_106569.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA3T42PSWVEYF5DIHI%2F20230616%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20230616T184714Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Signature=d4b41c5f146f80cf23d3bc0a70ce0f6dc3f500c0e7b6212deb7d7d8d59eb8230" alt="Google Logo">'
+// )
+
+const modules = {
+  name: 'imageUploader',
+  module: ImageUploader,
+  options: {
+    upload: (file) => {
+      formValues.image = file
+    }
+  }
+}
 
 // Validation
 const rules = computed(() => {
@@ -112,17 +140,6 @@ v$.value.$validate();
 const { title, slug, content, short_content } = toRefs(v$);
 
 const handleSubmit = () => {
-  v$.value.$validate();
-  if (v$.value.$error) {
-    console.log("error")
-        alert(
-       "I'm sorry, you seem to not have filled all inputs. Please fill them up and try again."
-     );
-    // Form is invalid
-    // You can display an error message or perform appropriate actions
-  }
-
-  console.log(formValues);
   newsStore.createNews(formValues).then(() => {
     newsStore.fetchNews('');
     refCreateNews.value.close();
@@ -132,14 +149,20 @@ const handleSubmit = () => {
 const refCreateNews = ref('')
 
 const handleContent = (val) => {
-  formValues.content = val.ops[0].insert
+  formValues.content = val
 }
 
 const handleAddAttachment = () => {
-  formValues.files.push('')
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.onchange = (e) => {
+    formValues.files.push(e.target.files[0])
+  }
+  input.click()
 }
 
-const handleChangeFile = (event, index) => {
-  formValues.files[index] = event.target.files[0]
+const handleDeleteFile = (index) => {
+  formValues.files.splice(index, 1)
+  fileCounter.value--
 }
 </script>

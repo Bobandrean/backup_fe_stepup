@@ -3,7 +3,7 @@
     <v-navigation-drawer color="#005EB8" v-model="drawer" location="left" temporary>
       <v-list nav v-model:opened="open">
         <v-list-item prepend-icon="mdi-home" style="cursor: pointer" @click="goToHome()"
-          ><span class="text-item">Home</span></v-list-item
+          ><span class="text-item">Home Admin</span></v-list-item
         >
         <v-list-group prepend-icon="mdi-newspaper" value="News Menu">
           <template v-slot:activator="{ props }">

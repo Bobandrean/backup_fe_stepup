@@ -1,134 +1,130 @@
 import {
-    ref,
-    computed
+  ref,
+  computed
 } from 'vue'
 import {
-    defineStore
+  defineStore
 } from 'pinia'
-import SERVICE from "@/services/news.js"
+import SERVICE from '@/services/news.js'
 import Swal from 'sweetalert2'
 
 export const useNewsStore = defineStore('news', () => {
-    const news = ref([]);
-    const detailNews = ref({});
+  const news = ref([])
 
-    const getNews = () => {
-        return news.value;
-    };
+  const detailNews = ref({})
 
-    const getDetailNews = computed(() => detailNews.value)
+  const getNews = computed(() => news.value)
+  const getDetailNews = computed(() => detailNews.value)
 
-    const setNews = (value) => {
-        news.value = value
+  const setNews = (value) => {
+    news.value = value
+  }
+
+  const setDetailNews = (data) => {
+    detailNews.value = data
+  }
+
+  const fetchNews = async (payload) => {
+    const query = {
+      orderBy: payload.orderBy ? payload.orderBy : '',
+      searchTitle: payload.searchTitle ? payload.searchTitle : '',
+      page: payload.page ? payload.page : ''
     }
-
-    const setDetailNews = (data) => {
-        detailNews.value = data
+    try {
+      const res = await SERVICE.getNews(query)
+      setNews(res)
+    } catch (error) {
+      console.error(error)
     }
+  }
 
-    const fetchNews = async (payload) => {
-        const query = {
-            orderBy: payload.orderBy ? payload.orderBy : "",
-            searchTitle: payload.searchTitle ? payload.searchTitle : "",
-        };
-        try {
-
-            const res = await SERVICE.getNews(query);
-
-            setNews(res.data)
-
-        } catch (error) {
-            console.error(error)
-        }
-    };
-
-    async function fetchDetailNews(id) {
-        try {
-
-            const res = await SERVICE.detailNews({
-                id
-            });
-            setDetailNews(res.data);
-        } catch (error) {
-            console.error(error);
-        }
+  async function fetchDetailNews(id) {
+    try {
+      const res = await SERVICE.detailNews({
+        id
+      })
+      setDetailNews(res.data)
+    } catch (error) {
+      console.error(error)
     }
+  }
 
-    async function createNews(payload) {
-        try {
-
-            const res = await SERVICE.createNews({
-                payload
-            })
-            Swal.fire({
-                icon: "success",
-                title: "Success",
-                text: "Berhasil Membuat News",
-            });
-            return res
-
-        } catch (error) {
-            console.error(error)
-        }
+  async function createNews(payload) {
+    try {
+      const res = await SERVICE.createNews({
+        payload
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Berhasil Membuat News'
+      })
+      return res
+    } catch (error) {
+      console.error(error)
     }
+  }
 
-    async function updateNews(id, payload) {
-        try {
+  async function updateNews(id, payload) {
+    try {
+      const res = await SERVICE.updateNews({
+        id,
+        payload
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Berhasil Mengubah News'
+      })
 
-            const res = await SERVICE.updateNews({
-                id,
-                payload
-            })
-            Swal.fire({
-                icon: "success",
-                title: "Success",
-                text: "Berhasil Mengubah News",
-            });
-
-            return res
-
-        } catch (error) {
-            console.error(error)
-        }
+      return res
+    } catch (error) {
+      console.error(error)
     }
+  }
 
-    async function showNews(id) {
-        try {
-
-            const res = await SERVICE.hideNews({
-                id
-            })
-
-            return res
-
-        } catch (error) {
-            console.error(error)
-        }
+  async function showNews(id) {
+    try {
+      const res = await SERVICE.hideNews({
+        id
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Berhasil sembunyikan news'
+      })
+      return res
+    } catch (error) {
+      console.error(error)
     }
+  }
 
-    async function hideNews(id) {
-        try {
+  async function hideNews(id) {
+    try {
+      const res = await SERVICE.showNews({
+        id
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Berhasil Menampilkan news'
+      })
 
-            const res = await SERVICE.showNews({
-                id
-            })
-
-            return res
-
-        } catch (error) {
-            console.error(error)
-        }
+      return res
+    } catch (error) {
+      console.error(error)
     }
+  }
 
-    return {
-        news,
-        getNews,
-        getDetailNews,
-        fetchDetailNews,
-        fetchNews,
-        createNews,
-        updateNews,
-        showNews,
-        hideNews
-    }
+  return {
+    news,
+    getNews,
+    getDetailNews,
+    fetchDetailNews,
+    fetchNews,
+    createNews,
+    updateNews,
+    showNews,
+    hideNews
+  }
 })

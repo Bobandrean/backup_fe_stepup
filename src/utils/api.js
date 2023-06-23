@@ -90,15 +90,15 @@ class Api {
 
   async doDelete(url, params) {
     return await api
-      .delete(PREFIX + url, params, {
+      .delete(baseUrl + url, params, {
         headers: {
           Authorization: `Bearer ${authToken}`
         }
       })
       .then((res) => res.data)
       .catch((error) => {
-        throw error
-      })
+        throw error;
+      });
   }
 
   async doGetBlob(url, params) {

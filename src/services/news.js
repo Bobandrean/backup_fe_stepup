@@ -7,42 +7,55 @@ class NewsServices {
       .catch((err) => err)
   }
 
-  async createNews({ payload }) {
+  async createNews({
+    payload
+  }) {
     const formData = new FormData()
     formData.append('title', payload.title)
-    formData.append('slug', payload.slug)
     formData.append('content', payload.content)
-    formData.append('short_content', payload.short_content)
-    formData.append('image', payload.image[0])
+    payload.files.forEach((file, index) => {
+      formData.append(`files[${index}][file]`, file)
+    })
     const res = await Api.doPost(`news/create`, formData)
     return res
   }
 
-  async detailNews({ id }) {
+  async detailNews({
+    id
+  }) {
     const res = await Api.doGet(`news/detail/${id}`)
     return res
   }
 
-  async showNews({ id }) {
+  async showNews({
+    id
+  }) {
     const res = await Api.doPost(`news/show/${id}`)
     return res
   }
 
-  async hideNews({ id }) {
+  async hideNews({
+    id
+  }) {
     const res = await Api.doPost(`news/hide/${id}`)
     return res
   }
 
-  async updateNews({ id, payload }) {
+  async updateNews({
+    id,
+    payload
+  }) {
     const formData = new FormData()
     formData.append('title', payload.title)
-    formData.append('slug', payload.slug)
     formData.append('content', payload.content)
-    formData.append('short_content', payload.short_content)
-
-    if (payload?.image?.length > 0) {
-      formData.append('image', payload.image[0])
-    }
+    payload.files.forEach((file, index) => {
+      console.log(file);
+      if (file instanceof File || file instanceof Blob) {
+        formData.append(`files[${index}][file]`, file);
+      } else {
+        formData.append(`files[${index}][file]`, JSON.stringify(file));
+      }
+    });
 
     const res = await Api.doPost(`news/update/${id}`, formData)
     return res

@@ -1,32 +1,61 @@
 <template>
   <v-row class="mt-5">
-    <v-col md="4" class="ml-5">
+    <v-col cols="3" md="4" class="ml-5">
       <v-text-field
+        v-model="search.searchTitle"
         label="Search"
         variant="outlined"
         append-inner-icon="mdi-magnify"
       ></v-text-field>
     </v-col>
-    <v-col md="4">
-      <v-row>
-        <v-col md="2" no-gutters align="center" class="mt-4"> Sort By : </v-col>
-        <v-col md="10" no-gutters align="center">
-          <v-select :items="['Newest', 'Oldest', 'Titled']" variant="outlined"></v-select>
+    <!-- <v-col cols="3" md="4">
+      <v-row align="center">
+        <v-col cols="3" no-gutters align="center" class="mt-4">Sort By:</v-col>
+        <v-col cols="9" no-gutters>
+          <v-select
+            :items="['Newest', 'Oldest', 'Titled']"
+            variant="outlined"
+            class="align-self-center"
+          ></v-select>
         </v-col>
+      </v-row>
+    </v-col> -->
+    <v-col cols="3">
+      <v-row align="center">
+        <v-col cols="4" align="center">Page</v-col>
+        <v-col cols="4">
+          <v-select
+            item-value="label"
+            item-title="label"
+            :items="getTotalPages"
+            @update:model-value="handlePage($event)"
+            variant="outlined"
+          ></v-select>
+        </v-col>
+        <v-col cols="4" align="center">Of {{ getNews?.data?.last_page }}</v-col>
       </v-row>
     </v-col>
   </v-row>
 
   <v-row>
-    <v-col cols="12" sm="6" md="4" align="center" v-for="news in getNews" :key="news.id">
-      <v-card>
-        <v-card-title class="v-card--title justify-center">
-          {{ news?.title }}
-        </v-card-title>
-        <v-img style="height: 140px" :src="news?.image"></v-img>
-        <v-card-text class="v-card--title justify-center">
-          {{ news?.short_content }}
-        </v-card-text>
+    <v-col
+      cols="12"
+      sm="6"
+      md="4"
+      align="center"
+      v-for="news in getNews?.data?.data"
+      :key="news.id"
+    >
+      <v-card style="height: 100%">
+        <v-card style="height: 77%">
+          <v-card-title class="v-card--title justify-center">
+            {{ news?.title }}
+          </v-card-title>
+
+          <v-card-text class="v-card--title justify-center">
+            <div style="max-height: 250px" v-html="news?.content"></div>
+          </v-card-text>
+        </v-card>
         <v-btn @click="handlePreview(news?.id)" outlined class="mb-5 mt-5 primary-button"
           >More Details</v-btn
         >
@@ -38,15 +67,46 @@
 <script setup>
 import { useRouter } from 'vue-router'
 
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, reactive, watchEffect } from 'vue'
 import { useNewsStore } from '@/stores/news'
 import { useAuthStore } from '@/stores/auth'
 
 const newsStore = useNewsStore()
-const getNews = computed(() => newsStore.getNews())
+const getNews = computed(() => newsStore.getNews)
+
+const search = reactive({
+  searchTitle: '',
+  orderBy: ''
+})
+
+const getTotalPages = computed(() => {
+  const array = []
+
+  newsStore.getNews?.data?.links.forEach((element) => {
+    array.push(element.label)
+  })
+
+  array.pop()
+  array.shift()
+
+  console.log(array)
+
+  return array
+})
 
 onMounted(() => {
   newsStore.fetchNews('')
+})
+
+watchEffect(() => {
+  const query = {}
+  if (search.searchTitle !== '') {
+    query.searchTitle = search.searchTitle
+  }
+  if (search.searchorderBy !== '') {
+    query.orderBy = search.orderBy
+  }
+  newsStore.fetchNews(query)
 })
 
 const authStore = useAuthStore()
@@ -59,6 +119,16 @@ const router = useRouter()
 
 const handlePreview = async (id) => {
   router.push(`/admin/news/preview/${id}`)
+}
+
+const handlePage = async (page) => {
+  console.log(page)
+
+  const payload = {
+    page
+  }
+
+  newsStore.fetchNews(payload)
 }
 </script>
 

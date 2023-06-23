@@ -9,24 +9,28 @@
   <v-row>
     <v-col md="2"></v-col>
     <v-col md="8">
-      <v-form v-model="valid" @submit.prevent="handleSubmit">
-        <v-card class="mt-5" v-for="question in getDetailQuiz.question" :key="question.id">
-          <v-card-item>
-            <v-card-title>{{ question.title }}</v-card-title>
-            <v-radio-group v-model="question.is_selected_answer">
-              <v-radio
-                v-for="choice in question.choice"
+      <v-card class="mt-5" v-for="question in getDetailQuiz.question" :key="question.id">
+        <v-card-item>
+          <v-card-title>{{ question.title }}</v-card-title>
+          <template v-for="choice in question.choice">
+            <template v-if="choice.is_correct === '1'">
+              <v-checkbox
                 :key="choice.id"
-                :id="choice.id"
                 :label="choice.choice_text"
-                :value="choice.choice_text"
-              >
-              </v-radio>
-            </v-radio-group>
-          </v-card-item>
-        </v-card>
-        <v-btn class="mt-5 save-button" type="submit">Submit</v-btn>
-      </v-form>
+                :disabled="true"
+                v-model="isChecked"
+              ></v-checkbox>
+            </template>
+            <template v-else>
+              <v-checkbox
+                :key="choice.id"
+                :label="choice.choice_text"
+                :disabled="true"
+              ></v-checkbox>
+            </template>
+          </template>
+        </v-card-item>
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -44,24 +48,16 @@ onMounted(() => {
   quizStore.fetchDetailQuiz(route.params.id)
 })
 
-const getAnswerQuiz = computed(() => quizStore.getAnswerQuiz)
-
-const choiceAnswer = ref('')
-
 const router = useRouter()
-const is_selected = ref(false) // Set it to `true` for checked, or `false` for unchecked
+const isChecked = ref(true) // Set it to `true` for checked, or `false` for unchecked
 
 // Initialize selectedChoices for each question
 
 const handleBack = () => {
-  router.back()
-}
+  // perform logout logic
 
-const handleSubmit = () => {
-  console.log(getDetailQuiz.value)
-  quizStore.createAnswerQuiz(route.params.id, getDetailQuiz.value).then(() => {
-    window.history.back()
-  })
+  // redirect to login page
+  router.push('/admin/quiz/manage')
 }
 </script>
 
@@ -134,22 +130,5 @@ const handleSubmit = () => {
   will-change: box-shadow;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
-}
-.primary-button {
-  background-color: #005eb8;
-  color: white;
-}
-
-.primary-button:hover {
-  background-color: #005eb8;
-}
-
-.save-button {
-  background-color: green;
-  color: white;
-}
-
-.save-button:hover {
-  background-color: darkgreen;
 }
 </style>
