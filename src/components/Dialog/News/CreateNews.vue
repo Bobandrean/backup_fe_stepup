@@ -12,27 +12,13 @@
           required
           variant="outlined"
         ></v-text-field>
-<<<<<<< HEAD
-        <span style="color:red" v-if="v$.title.$error">
-        {{ v$.title.$errors[0].$message }}
-      </span>
-        <v-text-field
-=======
         <!-- <v-text-field
->>>>>>> 4d54377585ad8d36b80edde5ccb0d7c75838d9bf
           v-model="formValues.slug"
           :rules="[rules.required]"
           label="Slug"
           required
           variant="outlined"
-<<<<<<< HEAD
-        ></v-text-field>
-        <span style="color:red" v-if="v$.slug.$error">
-        {{ v$.slug.$errors[0].$message }}
-        </span>
-=======
         ></v-text-field> -->
->>>>>>> 4d54377585ad8d36b80edde5ccb0d7c75838d9bf
         <QuillEditor
           theme="snow"
           @update:content="handleContent($event)"
@@ -48,16 +34,8 @@
           :rules="[rules.required]"
           required
           variant="outlined"
-<<<<<<< HEAD
-        >
-        </v-textarea>
-        <span style="color:red" v-if="v$.short_content.$error">
-        {{ v$.short_content.$errors[0].$message }}
-        </span>
-=======
         > -->
         <!-- </v-textarea> -->
->>>>>>> 4d54377585ad8d36b80edde5ccb0d7c75838d9bf
         <v-file-input
           class="mt-5"
           v-model="formValues.image"
